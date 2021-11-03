@@ -1,7 +1,25 @@
 import os
 from RobotCode.RobotModel import RobotModel
+from Server.WebApp import startWebApp
+import threading
 
 cRobotConfigurationPath = "./config/Robot_DarkPaw.json"
+
+
+def robotThread(iRobot):
+    try:
+        print("Starting DarkPaw")
+        iRobot.wake()
+        iRobot.run()
+    except Exception as e:
+        print(e)
+    
+    print("Shutting down DarkPaw")
+    iRobot.sleep()
+    
+
+def WebAppThread(iRobot):
+    startWebApp(5000)
 
 def main():
     wWorkingFolder = os.getcwd()
@@ -13,15 +31,17 @@ def main():
     wRobot = RobotModel()
     wRobot.loadConfig(cRobotConfigurationPath)
     
-    try:
-        print("Starting DarkPaw")
-        wRobot.wake()
-        wRobot.run()
-    except Exception as e:
-        print(e)
+    wThreadList = []
+    wThreadList.append(threading.Thread(target=robotThread,  args=(wRobot,)))
+    wThreadList.append(threading.Thread(target=WebAppThread, args=(wRobot,)))
 
-    print("Shutting down DarkPaw")
-    wRobot.sleep()
+    for wThread in wThreadList:
+        wThread.isDaemon = True
+        wThread.start()
+
+    for wThread in wThreadList:
+        wThread.join()
+
     print("Shutdown complete")
 
     print("Changing working directory to [{}]".format(wWorkingFolder) )
