@@ -2,9 +2,18 @@ import json
 from os import wait
 import time
 import math
+import threading
 
 from .HWIO.LED import LED
 from .HWIO.Switch import Switch
+
+
+eRobotState_VOID = 0
+eRobotState_LOAD = 1
+eRobotState_WAKE = 2
+eRobotState_RUN = 3
+eRobotState_DROWZEE = 4
+eRobotState_SLEEP = 5
 
 class RobotModel:
     def __init__(self):
@@ -18,9 +27,15 @@ class RobotModel:
 
         self._switch_state = []
         self._switch_Controller = None
+
+        self._robotState = eRobotState_VOID
+        self._robotThread = None
         return
 
     def cleanConfig(self):
+
+        if eRobotState_WAKE <= self._robotState:
+            self.sleep()
         
         self._led_left = []
         self._led_right = []
@@ -35,6 +50,7 @@ class RobotModel:
             del self._switch_Controller
             self._switch_Controller = None
 
+        self._robotState = eRobotState_VOID
         return
 
 
@@ -49,7 +65,8 @@ class RobotModel:
                 print(e)
             return False
 
-        self.cleanConfig()
+        if eRobotState_LOAD <= self._robotState:
+            self.cleanConfig()
 
         # Extract Robot Frequency
         if "Operating Frequency Hz" in wConfigObj:
@@ -79,7 +96,6 @@ class RobotModel:
             wPinArray = []
             self._switch_state = []
             for wPin in wConfigObj["Switch GPIO"]:
-                print(wPin)
                 if wPin > 0:
                     wPinArray.append(int(wPin))
                     self._switch_state.append(False)
@@ -87,11 +103,21 @@ class RobotModel:
             self._switch_Controller = Switch(wPinArray)
             
 
-        print(self._switch_state)
-        return False
+        self._robotState = eRobotState_LOAD
+
+        return True
 
 
     def wake(self):
+
+        if eRobotState_LOAD > self._robotState:
+            return False
+
+        if eRobotState_WAKE <= self._robotState:
+            self.sleep()
+
+        print("Robot Waking")
+
         self.setLEDWipe_Left(iRed=255)
         self.update_LED()
         time.sleep(0.5)
@@ -131,17 +157,56 @@ class RobotModel:
     
         self.setLEDWipe_Left()
         self.setLEDWipe_Right()
+
+        self._robotState = eRobotState_WAKE
+
+
+        self._robotThread = threading.Thread(target=self._run)
+        self._robotThread.daemon = True
+        self._robotThread.start()
+
+        return True
+
+
+    def sleep(self):
+
+        if eRobotState_RUN == self._robotState:
+            self._robotState = eRobotState_DROWZEE
+            if None != self._robotThread:
+                self._robotThread.join()
+                self._robotThread = None
+
+        self._led_Controller.colorWipe(0,0,0)
+        
+        wLastState = self._robotState
+        self._robotState = eRobotState_SLEEP
+
+        if eRobotState_RUN == wLastState:
+            if None != self._robotThread:
+                self._robotThread.join()
+
+        self._robotState = eRobotState_SLEEP
+
+        print("Robot Sleeping")
         return
 
 
-    def run(self):
+    def _run(self):
+
+        if eRobotState_WAKE != self._robotState:
+            return
+
+        print("Robot Running")
+
+        self._robotState = eRobotState_RUN
+
         if self._frequency < 1:
             self._frequency = 1
 
         wTimeStep = 1/self._frequency
 
         wLastDt0 = time.time() - wTimeStep
-        while True:        
+        while eRobotState_RUN == self._robotState:        
             wt0 = time.time()
             wDt = wt0 - wLastDt0
             wLastDt0 = wt0
@@ -155,12 +220,10 @@ class RobotModel:
             if wSlpT > 0:
                 time.sleep(wSlpT)
         
+        print("Robot Drowzee")
+
         return
 
-    def sleep(self):
-        self._led_Controller.colorWipe(0,0,0)
-        print("Robot Terminate")
-        return
 
     def _tick(self, iDt, iElapseTime):
 

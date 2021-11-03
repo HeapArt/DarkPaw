@@ -1,39 +1,54 @@
 import os
 from RobotCode.RobotModel import RobotModel
-from Server.WebApp import startWebApp
+import Server.WebApp as WebApp
 import threading
 
+cWorkingFolder = os.getcwd()
+cRepoPath = os.path.dirname(os.path.abspath(__file__))
 cRobotConfigurationPath = "./config/Robot_DarkPaw.json"
 
+gRobot = None
+def getRobot():
+    global gRobot
+    if None == gRobot:
+        gRobot = RobotModel()
+        gRobot.loadConfig(cRobotConfigurationPath)
+    return gRobot
 
-def robotThread(iRobot):
+
+def robotThread():
+    wRobot = getRobot()
     try:
         print("Starting DarkPaw")
-        iRobot.wake()
-        iRobot.run()
+        wRobot.wake()
     except Exception as e:
         print(e)
-    
-    print("Shutting down DarkPaw")
-    iRobot.sleep()
-    
+        wRobot.sleep()
+        
 
-def WebAppThread(iRobot):
-    startWebApp(5000)
+def WebAppThread():
+    WebApp.subscribeToKillProcessCallback(ShutdownRoutine)
+    WebApp.startWebApp(5000)
+
+
+def ShutdownRoutine():
+    wRobot = getRobot()
+    wRobot.sleep()
+
+    print("Changing working directory to [{}]".format(cWorkingFolder) )
+    os.chdir(cWorkingFolder)
+
+    print("Shutdown complete")
+
 
 def main():
-    wWorkingFolder = os.getcwd()
-    wRepoPath = os.path.dirname(os.path.abspath(__file__))
 
-    print("Changing working directory to [{}]".format(wRepoPath) )
-    os.chdir(wRepoPath)
+    print("Changing working directory to [{}]".format(cRepoPath) )
+    os.chdir(cRepoPath)
 
-    wRobot = RobotModel()
-    wRobot.loadConfig(cRobotConfigurationPath)
-    
     wThreadList = []
-    wThreadList.append(threading.Thread(target=robotThread,  args=(wRobot,)))
-    wThreadList.append(threading.Thread(target=WebAppThread, args=(wRobot,)))
+    wThreadList.append(threading.Thread(target=robotThread))
+    wThreadList.append(threading.Thread(target=WebAppThread))
 
     for wThread in wThreadList:
         wThread.isDaemon = True
@@ -42,10 +57,7 @@ def main():
     for wThread in wThreadList:
         wThread.join()
 
-    print("Shutdown complete")
-
-    print("Changing working directory to [{}]".format(wWorkingFolder) )
-    os.chdir(wWorkingFolder)
+    ShutdownRoutine()
     return 0
 
 
