@@ -42,11 +42,31 @@ class LED:
         color = Color(R,G,B)
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
-            self.strip.show()
+        self.strip.show()
             
+
+    # Define functions which animate LEDs in various ways.
+    def colorWipeSet(self, iPixelSet, R, G, B):
+        """Wipe color across display a pixel at a time."""
+        color = Color(R,G,B)
+        for i in iPixelSet:
+            if i >= 0:
+                self.strip.setPixelColor(i, color)
+        self.strip.show()
+            
+
     def setColor(self, iPixel, R,G, B):
         color = Color(R, G, B)
-        self.strip.setPixelColor(iPixel, color)
+        if iPixel >= 0:
+            self.strip.setPixelColor(iPixel, color)
+        self.strip.show()
+
+
+    def setColorSet(self, iPixelSetWithColor):
+        for wPixelWColor in iPixelSetWithColor:
+            if wPixelWColor[0] >= 0:
+                color = Color(wPixelWColor[1], wPixelWColor[2], wPixelWColor[3])
+                self.strip.setPixelColor(wPixelWColor[0], color)
         self.strip.show()
 
 
@@ -96,4 +116,5 @@ def testFunc():
         
         
 if __name__ == '__main__':
-    testFunc()
+    #testFunc()
+    originalFunc()
