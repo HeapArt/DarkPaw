@@ -1,6 +1,5 @@
 import os
 from RobotCode.RobotModel import RobotModel
-from RobotCode.BehaviorModel import getBehaviorModel
 import Server.WebApp as WebApp
 import threading
 
@@ -14,11 +13,7 @@ def getRobot():
   if None == gRobot:
     gRobot = RobotModel()
     gRobot.loadConfig(cRobotConfigurationPath)
-
-    wBehaviorModel = getBehaviorModel()
-    print(wBehaviorModel.getBehaviorMenu())
-    wBehaviorModel.selectBehavior("Light", "TestLights")
-    gRobot.setBehaviorManager(getBehaviorModel())
+    gRobot.getBehavior().selectBehavior("Light", "TestLights")
   return gRobot
 
 
