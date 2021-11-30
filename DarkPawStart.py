@@ -13,7 +13,7 @@ def getRobot():
   if None == gRobot:
     gRobot = RobotModel()
     gRobot.loadConfig(cRobotConfigurationPath)
-    gRobot.getBehavior().selectBehavior("Light", "TestLights")
+    gRobot.getBehavior().selectBehavior("LED", "Test LED")
   return gRobot
 
 

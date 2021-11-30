@@ -17,11 +17,11 @@ class BehaviorTemplate():
     return self._behaviorName
 
 
-  def wake(self, iRobot):
+  def start(self, iRobot):
     return True
 
 
-  def sleep(self, iRobot):
+  def stop(self, iRobot):
     return True
   
   

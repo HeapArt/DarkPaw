@@ -13,7 +13,7 @@ import pygame
 
 def t2():
   
-  tts = gTTS("Hello world the j")
+  tts = gTTS("Hello Hello Hello")
   tts.save("hello.mp3")
 
   pygame.mixer.init()
