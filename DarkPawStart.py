@@ -1,24 +1,20 @@
 import os
-from RobotCode.RobotModel import RobotModel
-import Server.WebApp as WebApp
 import threading
+
+from RobotCode.RobotModel import getRobotModel
+from RobotCode.RobotApi import Robot_Api_BluePrint
+from Server import WebApp
 
 cWorkingFolder = os.getcwd()
 cRepoPath = os.path.dirname(os.path.abspath(__file__))
 cRobotConfigurationPath = "./config/Robot_DarkPaw.json"
 
-gRobot = None
-def getRobot():
-  global gRobot
-  if None == gRobot:
-    gRobot = RobotModel()
-    gRobot.loadConfig(cRobotConfigurationPath)
-    gRobot.getBehavior().selectBehavior("LED", "Test LED")
-  return gRobot
-
-
 def robotThread():
-  wRobot = getRobot()
+
+  wRobot = getRobotModel()
+  wRobot.loadConfig(cRobotConfigurationPath)
+  wRobot.getBehavior().selectBehavior("LED", "Test LED")
+
   try:
     print("Starting DarkPaw")
     wRobot.wake()
@@ -29,11 +25,13 @@ def robotThread():
 
 def WebAppThread():
   WebApp.subscribeToKillProcessCallback(ShutdownRoutine)
-  WebApp.startWebApp(5000)
+
+  wBluePrintList = [Robot_Api_BluePrint]
+  WebApp.startWebApp(5000, wBluePrintList)
 
 
 def ShutdownRoutine():
-  wRobot = getRobot()
+  wRobot = getRobotModel()
   wRobot.sleep()
 
   print("Changing working directory to [{}]".format(cWorkingFolder) )

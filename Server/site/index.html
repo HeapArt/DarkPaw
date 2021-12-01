@@ -1,11 +1,109 @@
 <!DOCTYPE html>
 <html>
   <header>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Heap Art DarkPaw</title>
     <script src="javascript/robot_api_v1.js"></script>
+  
+    <script>
+      gGlobal = {
+        CurrentBehavior : null
+        ,BehaviorMenu : {}
+      };
+
+      window.addEventListener('load', function(event){
+        
+        getCurrentRobotBehavior(function(iCurrentBehavior){
+          gGlobal.CurrentBehavior = iCurrentBehavior
+
+          for (const iBehaviorType in iCurrentBehavior) {
+            if(true == gGlobal.BehaviorMenu.hasOwnProperty(iBehaviorType))
+            {
+              wSelectionDom = gGlobal.BehaviorMenu[iBehaviorType].getElementsByTagName("select");
+              wSelectionDom.value = iCurrentBehavior[iBehaviorType][0]
+            }
+          }
+        });
+
+
+        getRobotBehaviorMenu(function(iMenu){
+          var wBehaviorMenuDiv = document.getElementById("id_behavior_menu_div")
+          wBehaviorMenuDiv.innerHTML = ""
+          for (const iBehaviorType in iMenu) {
+            wBehaviorTypeMenuDiv = document.createElement("div") 
+
+            wBehaviorTypeLabel = document.createElement("span")
+            wBehaviorTypeLabel.innerText = iBehaviorType
+            wBehaviorTypeMenuDiv.append(wBehaviorTypeLabel)
+
+            wBehaviorTypeSelect = document.createElement("select")
+            wBehaviorTypeMenuDiv.append(wBehaviorTypeSelect)
+
+            wOptions = iMenu[iBehaviorType]
+            
+            for(var wi = 0; wi < wOptions.length; ++wi){
+              wOptionDom = document.createElement("option")
+              wOptionDom.value = wOptions[wi]
+              wOptionDom.innerText = wOptions[wi]
+              wBehaviorTypeSelect.append(wOptionDom)
+            }
+
+            if (null != gGlobal.CurrentBehavior) {
+              if (true == gGlobal.CurrentBehavior.hasOwnProperty(iBehaviorType)) {
+                if (0 != gGlobal.CurrentBehavior[iBehaviorType].length) {
+                  wBehaviorTypeSelect.value = gGlobal.CurrentBehavior[iBehaviorType][0];
+                }
+              }
+            }
+
+            wBehaviorForm = document.createElement("span")
+            wBehaviorTypeMenuDiv.append(wBehaviorForm)
+
+            wBehaviorTypeSelect.behaviorType = iBehaviorType;
+            wBehaviorTypeSelect.behaviorForm = wBehaviorForm;
+            wFormLoadFunction = function(evt) {
+              getRobotBehaviorForm(evt.target.behaviorType, evt.target.value, function(iFormDescription){
+                evt.target.behaviorForm.innerText = JSON.stringify(iFormDescription);
+              });
+              
+            };
+
+            wBehaviorTypeSelect.addEventListener("load", wFormLoadFunction);
+            wBehaviorTypeSelect.addEventListener("change", wFormLoadFunction);
+
+
+            wBehaviorSendButton = document.createElement("button")
+            wBehaviorSendButton.innerText = "Set"
+            wBehaviorSendButton.OptionMenu = wBehaviorTypeSelect
+            wBehaviorSendButton.addEventListener("click",function(evt){
+              setRobotBehavior(evt.target.OptionMenu.behaviorType, evt.target.OptionMenu.value);
+            })
+            
+            wBehaviorTypeMenuDiv.append(wBehaviorSendButton)
+
+            wBehaviorMenuDiv.append(wBehaviorTypeMenuDiv)
+            gGlobal.BehaviorMenu[iBehaviorType] = wBehaviorTypeMenuDiv
+
+          }
+        });
+  
+  
+        console.log('page is fully loaded');
+      });
+  
+    </script>
   </header>
   <body>
-    <h1>Hello DarkPaw</h1>
-    <button onclick="sendKillProcess()">Kill Process</button>
+    <div>
+      <h1>Hello DarkPaw</h1>
+      <div>
+        <h2>Kill Button</h2>
+        <button onclick="sendKillProcess()">Kill Process</button>  
+      </div>  
+      <div>
+        <h2>Behavior Selection</h2>
+        <div id="id_behavior_menu_div"></div>
+      </div>  
+    </div>
   </body>
 </html>

@@ -2,8 +2,25 @@ import time, math
 from .BehaviorDB import BehaviorTemplate
 
 class Behavior_TestLED(BehaviorTemplate):
-  def __init__(self):
-    super().__init__("LED", "Test LED")
+  def __init__(self, iLeft, iRight):
+    
+    self._mLeftEnabled = False
+    self._mRightEnabled = False
+    wType = "LED"
+    wName = "Test Lights"
+    if iLeft != iRight:
+      if iLeft:
+        wType = wType + " Left"
+        self._mLeftEnabled = True
+      elif iRight:
+        wType = wType + " Right"
+        self._mRightEnabled = True
+    else:
+      self._mLeftEnabled = True
+      self._mRightEnabled = True
+
+    super().__init__(wType, wName)
+    
     self._mState = 0
     self._mStateWaitElaspTime = 0.0
     return
@@ -21,57 +38,45 @@ class Behavior_TestLED(BehaviorTemplate):
   def tick(self, iRobot, iDt, iElapseTime):
 
     wHW = iRobot.getHardware()
-    wWaitTime = 1.0
-
-    if 0 == self._mState:
-      pass
-
-    if 1 == self._mState:
-      wHW.setLEDWipe_Left(iRed=255)
-
-    if 2 == self._mState:
-      wHW.setLEDWipe_Left(iBlue=255)
-
-    if 3 == self._mState:
-      wHW.setLEDWipe_Left(iGreen=255)
-
-    if 4 == self._mState:
-      wHW.setLEDWipe_Left()
-
-    if 5 == self._mState:
-      wHW.setLEDWipe_Right(iRed=255)
-
-    if 6 == self._mState:
-      wHW.setLEDWipe_Right(iBlue=255)
-
-    if 7 == self._mState:
-      wHW.setLEDWipe_Right(iGreen=255)
-
-    if 8 == self._mState:
-      wHW.setLEDWipe_Right()
-
-    wBaseStateValue = 9
-    if wBaseStateValue <= self._mState:
-      if wHW.getLEDCount_Left() + wBaseStateValue > self._mState:
-        wLEDId = self._mState - wBaseStateValue
-        wHW.setLEDWipe_Left()
-        wHW.setLED_Left(wLEDId,255,255,255)
+    wWaitTime = 0.5
 
 
-    wBaseStateValue = wBaseStateValue + wHW.getLEDCount_Left() 
-    if wBaseStateValue <= self._mState:
-      if wHW.getLEDCount_Right() + wBaseStateValue > self._mState:
-        wLEDId = self._mState - wBaseStateValue
-        wHW.setLEDWipe_Right()
-        wHW.setLED_Right(wLEDId,255,255,255)
+    iColorSet = [[255, 0, 0],[0, 255, 0],[0, 0, 255]]
 
-    wBaseStateValue = wBaseStateValue + wHW.getLEDCount_Right() 
-    if wBaseStateValue < self._mState:
-      for i in range(0, wHW.getLEDCount_Left()):
-        wWave = int(0.5*(math.sin(10*iElapseTime/math.pi + i*math.pi/18)+1)*255)
-        wHW.setLED_Left(i,iBlue = wWave)
-        wHW.setLED_Right(i,iBlue = wWave)
-    
+    if self._mState < len(iColorSet):
+      wR = iColorSet[self._mState][0]
+      wG = iColorSet[self._mState][1]
+      wB = iColorSet[self._mState][2]
+      if self._mLeftEnabled:
+        wHW.setLEDWipe_Left(wR, wG, wB)
+      if self._mRightEnabled:
+        wHW.setLEDWipe_Right(wR, wG, wB)
+
+    else:
+      wBaseStateValue = len(iColorSet)
+      if self._mLeftEnabled:
+        if wHW.getLEDCount_Left() + wBaseStateValue > self._mState:
+          wLEDId = self._mState - wBaseStateValue
+          wHW.setLEDWipe_Left()
+          wHW.setLED_Left(wLEDId,255,255,255)
+      
+      if self._mRightEnabled:
+        if wHW.getLEDCount_Right() + wBaseStateValue > self._mState:
+          wLEDId = self._mState - wBaseStateValue
+          wHW.setLEDWipe_Right()
+          wHW.setLED_Right(wLEDId,255,255,255)
+
+    wLedCount = wHW.getLEDCount_Left()
+    if self._mLeftEnabled == self._mRightEnabled:
+      if wLedCount < wHW.getLEDCount_Right():
+        wLedCount = wHW.getLEDCount_Right()
+
+    elif self._mRightEnabled:
+      wLedCount = wHW.getLEDCount_Right()
+
+    if wLedCount + len(iColorSet) <= self._mState:
+      self._mState = 0
+
     self.stateWaitTimer(wWaitTime, iDt)
 
     return True
@@ -84,4 +89,5 @@ class Behavior_TestLED(BehaviorTemplate):
       self._mStateWaitElaspTime = 0.0
 
 
-_Behavior = Behavior_TestLED()
+_Behavior_l = Behavior_TestLED(True, False)
+_Behavior_r = Behavior_TestLED(False, True)

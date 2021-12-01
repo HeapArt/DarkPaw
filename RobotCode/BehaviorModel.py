@@ -1,5 +1,6 @@
 import time
 import math
+import copy
 from .BehaviorDB import getBehaviorDB
 
 class BehaviorModel():
@@ -9,13 +10,39 @@ class BehaviorModel():
     self._startBehaviorSet = {}
     return
 
-  def selectBehavior(self, iBehaviorType, iBehaviorName):
+
+  def loadConfig(self, iConfigObject):
+
+    # Setup Initial Behavior
+    if "Initial Behavior" in iConfigObject:
+      wInitialSetup = iConfigObject["Initial Behavior"]
+      for wBehavior in wInitialSetup:
+        if "Type" not in wBehavior or "Name" not in wBehavior:
+          print("Error parsing Initial Behavior : {}".format(json.dumps(wBehavior)))
+          return False
+
+        wParameter = {}
+        if "Parameter" in wBehavior:
+          wParameter = wBehavior["Parameter"]          
+        
+        self.selectBehavior(wBehavior["Type"], wBehavior["Name"], wParameter)
+
+    return True
+
+
+  def getCurrentBahaviorSet(self):
+    return copy.deepcopy(self._currentBehaviorSet)
+
+
+  def selectBehavior(self, iBehaviorType, iBehaviorName, iParameters = {}):
     wBehavior = getBehaviorDB().getBehavior(iBehaviorType, iBehaviorName)
     if None != wBehavior:
+      wBehavior.setParameters(iParameters)
       self._startBehaviorSet[iBehaviorType] = [iBehaviorName]
       return True
 
     return False
+
 
   def stopBehavior(self, iBehaviorType, iBehaviorName):
     wBehavior = getBehaviorDB().getBehavior(iBehaviorType, iBehaviorName)

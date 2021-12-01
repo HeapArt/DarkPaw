@@ -45,21 +45,12 @@ class HardwareModel:
     return
 
 
-  def loadConfig(self, iConfigJsonFilePath):
-    wConfigObj = None
-    try:
-      with open(iConfigJsonFilePath, "r") as wConfigFile:
-        wConfigObj = json.load(wConfigFile)
-    except Exception as e:
-      print("Robot Configuration Parsing Error [{}]".format(iConfigJsonFilePath))
-      if None != e:
-        print(e)
-      return False
+  def loadConfig(self, iConfigObject):
 
     # Extract LED Mapping
-    if "LED" in wConfigObj:
+    if "LED" in iConfigObject:
       self._led_Controller = LED()
-      wLedConf = wConfigObj["LED"]
+      wLedConf = iConfigObject["LED"]
       if "left" in wLedConf:
         for wIndex in wLedConf["left"]:
           wI = int(wIndex)
@@ -73,10 +64,10 @@ class HardwareModel:
             self._led_right.append([wI,0,0,0]) 
     
     # Extract Switch Mapping
-    if "Switch GPIO" in wConfigObj:
+    if "Switch GPIO" in iConfigObject:
       wPinArray = []
       self._switch_state = []
-      for wPin in wConfigObj["Switch GPIO"]:
+      for wPin in iConfigObject["Switch GPIO"]:
         if wPin > 0:
           wPinArray.append(int(wPin))
           self._switch_state.append(False)
@@ -187,7 +178,7 @@ class HardwareModel:
 
 
   def setSwitch(self, iIndex, iOn = False):
-    if iIndex > 0:
+    if iIndex >= 0:
       if iIndex < len(self._switch_state):
         self._switch_state[iIndex] = iOn
     return

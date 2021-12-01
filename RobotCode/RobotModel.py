@@ -59,7 +59,11 @@ class RobotModel:
         wFrequency = 1
       self._frequency = wFrequency
 
-    self._hardwware.loadConfig(iConfigJsonFilePath)
+    if "Hardware Setup" in wConfigObj:
+      self._hardwware.loadConfig(wConfigObj["Hardware Setup"])
+
+    if "Behavior Setup" in wConfigObj:
+      self._behavior.loadConfig(wConfigObj["Behavior Setup"])
 
 
     self._robotState = eRobotState_LOAD
@@ -160,3 +164,10 @@ class RobotModel:
 
   def getBehavior(self):
     return self._behavior
+
+_gRobotModel = None
+def getRobotModel():
+  global _gRobotModel
+  if None == _gRobotModel:
+    _gRobotModel = RobotModel()
+  return _gRobotModel

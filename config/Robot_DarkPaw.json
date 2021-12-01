@@ -1,10 +1,24 @@
 {
   "Operating Frequency Hz" : 50
   
-  , "LED" : {
-    "left" : [2,1,0]
-    ,"right" : [5,4,3]
+  , "Hardware Setup" : {
+    "LED" : {
+      "right" : [2,1,0]
+      ,"left" : [5,4,3]
+    }
+    
+    , "Switch GPIO" : [5 , 6, 13] 
+  
+  }
+
+  , "Behavior Setup" : {
+    "Initial Behavior" :
+    [
+      {"Type" : "LED Left" , "Name" : "Test Lights"}
+      ,{"Type" : "LED Right" , "Name" : "Test Lights"}
+      ,{"Type" : "Switch 0" , "Name" : "Turn Off", "Parameter":{"flicker": true}}
+      ,{"Type" : "Switch 1" , "Name" : "Turn Off"}
+    ]  
   }
   
-  , "Switch GPIO" : [5 , 6, 13] 
 }
