@@ -88,9 +88,6 @@ class BehaviorModel():
       wList = self._startBehaviorSet[wType]
       for wBehaviorName in wList:        
         if wType in self._currentBehaviorSet:
-          if wBehaviorName in self._currentBehaviorSet[wType]:
-            continue
-
           for wExistingBehavior in self._currentBehaviorSet[wType]:
             wBehavior = getBehaviorDB().getBehavior(wType, wExistingBehavior)
             print("Stopping Behavior [{}][{}]".format(wType, wExistingBehavior))

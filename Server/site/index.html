@@ -20,7 +20,7 @@
             if(true == gGlobal.BehaviorMenu.hasOwnProperty(iBehaviorType))
             {
               wSelectionDom = gGlobal.BehaviorMenu[iBehaviorType].getElementsByTagName("select");
-              wSelectionDom.value = iCurrentBehavior[iBehaviorType][0]
+              wSelectionDom[0].value = iCurrentBehavior[iBehaviorType][0]
             }
           }
         });
@@ -61,22 +61,19 @@
 
             wBehaviorTypeSelect.behaviorType = iBehaviorType;
             wBehaviorTypeSelect.behaviorForm = wBehaviorForm;
-            wFormLoadFunction = function(evt) {
-              getRobotBehaviorForm(evt.target.behaviorType, evt.target.value, function(iFormDescription){
-                evt.target.behaviorForm.innerText = JSON.stringify(iFormDescription);
-              });
-              
+            wFormLoadFunction = function(iSelect) {
+              getRobotBehaviorForm(iSelect.behaviorType, iSelect.value, iSelect.behaviorForm);
             };
 
-            wBehaviorTypeSelect.addEventListener("load", wFormLoadFunction);
-            wBehaviorTypeSelect.addEventListener("change", wFormLoadFunction);
+            wFormLoadFunction(wBehaviorTypeSelect)
+            wBehaviorTypeSelect.addEventListener("change", function(evt){ wFormLoadFunction(evt.target);});
 
 
             wBehaviorSendButton = document.createElement("button")
             wBehaviorSendButton.innerText = "Set"
             wBehaviorSendButton.OptionMenu = wBehaviorTypeSelect
             wBehaviorSendButton.addEventListener("click",function(evt){
-              setRobotBehavior(evt.target.OptionMenu.behaviorType, evt.target.OptionMenu.value);
+              setRobotBehavior(evt.target.OptionMenu.behaviorType, evt.target.OptionMenu.value, evt.target.OptionMenu.behaviorForm);
             })
             
             wBehaviorTypeMenuDiv.append(wBehaviorSendButton)

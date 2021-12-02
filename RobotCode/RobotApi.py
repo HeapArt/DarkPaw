@@ -29,6 +29,7 @@ def getBehaviorForm(iBehaviorType, iBehaviorName):
 @Robot_Api_BluePrint.route('/setBehavior', methods=["POST"])
 def setbehavior():
     wData = request.get_json()
+    
     if "Type" in wData:
       if "Name" in wData:
         if "Parameters" in wData:

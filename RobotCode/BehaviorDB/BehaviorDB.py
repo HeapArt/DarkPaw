@@ -22,20 +22,23 @@ class BehaviorTemplate():
 
   def getParametersForm(self):
     wFormObject = {}
-
+    print(self._mParameters)
     for wKey in self._mParameters:
       wType = ""
-      if isinstance(self._mParameters[wKey], int):
-        wType = "integer"
-      if isinstance(self._mParameters[wKey], float):
-        wType = "float"
-      if isinstance(self._mParameters[wKey], str):
-        wType = "string"
+
       if isinstance(self._mParameters[wKey], bool):
         wType = "boolean"
+      elif isinstance(self._mParameters[wKey], int):
+        wType = "integer"
+      elif isinstance(self._mParameters[wKey], float):
+        wType = "float"
+      elif isinstance(self._mParameters[wKey], str):
+        wType = "string"
 
       if "" is not wType:
-        wFormObject[wKey] = wType
+        wFormObject[wKey] = {}
+        wFormObject[wKey]["type"] = wType
+        wFormObject[wKey]["value"] = self._mParameters[wKey]
   
     return wFormObject
 
@@ -48,10 +51,27 @@ class BehaviorTemplate():
 
 
   def setParameters(self, iParameters):
+    print(iParameters)
     for wKey in self._mParameters:
       if wKey in iParameters:
-        if type(self._mParameters[wKey]) == type(iParameters[wKey]):
-          self._mParameters[wKey] = copy.deepcopy(iParameters[wKey])
+
+        if isinstance(self._mParameters[wKey], bool):
+          print("4")
+          self._mParameters[wKey] = False
+          if True == iParameters[wKey]:
+            self._mParameters[wKey] = True
+            
+        elif isinstance(self._mParameters[wKey], int):
+          self._mParameters[wKey] = int(iParameters[wKey])
+
+        elif isinstance(self._mParameters[wKey], float):
+          self._mParameters[wKey] = float(iParameters[wKey])
+
+        elif isinstance(self._mParameters[wKey], str):
+          self._mParameters[wKey] = str(iParameters[wKey])
+        
+
+
     return 
 
 

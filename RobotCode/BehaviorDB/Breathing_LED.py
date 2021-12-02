@@ -61,12 +61,10 @@ class Behavior_BreathingLED(BehaviorTemplate):
     wFrequency = self.getParameters()["Frequency"]
     if wFrequency <= 0.0:
       wFrequency = 1.0
-
-    wPeriod = 2*math.pi/ wFrequency
-    wPhaseShift = 0.1*wPeriod
-
+      
+    wPhaseShift = math.pi/18
     for i in range(0, wHW.getLEDCount_Left()):
-      wWave = int(0.5*(math.sin(iElapseTime/wFrequency + i*wPhaseShift)+1)*255)
+      wWave = int(0.5*(math.sin(iElapseTime*2*math.pi*wFrequency + i*wPhaseShift)+1)*255)
       if self._mLeftEnabled:
         wHW.setLED_Left(i,wWave*wColor[0],wWave*wColor[1],wWave*wColor[2])
       if self._mRightEnabled:
