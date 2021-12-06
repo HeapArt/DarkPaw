@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <header>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kenematics Testing</title>
+    <script>
+      function sendGetRequest(iUrl, iCallback) {
+        var wXhttp = new XMLHttpRequest();
+        wXhttp.open("GET", iUrl, true);
+        wXhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            if (null != iCallback) {
+              iCallback(this.responseText)
+            }
+          }
+        };
+
+        wXhttp.send();
+      }
+
+      function updateCanvas( iImageDefinition) {
+        var wCanvas = document.getElementById("id_viewport");
+        var wCtx = wCanvas.getContext("2d");
+        var wCenterX = wCanvas.width/2;
+        var wCenterY = wCanvas.height/2;
+        var wPointRadiusSize = 10;
+        var wXScale = 5;
+        var wYScale = -5
+        wCtx.clearRect(0,0,wCanvas.width, wCanvas.height);
+
+        if (null != iImageDefinition.points){
+          if (null != iImageDefinition.lines){
+            wCtx.fillStyle = 'orange';
+            wCtx.lineWidth = 3;
+            wCtx.strokeStyle = 'darkgrey';
+            
+            for( const wLine in iImageDefinition.lines){
+              var wPtList =iImageDefinition.lines[wLine];
+            
+              wCtx.beginPath()
+
+              var wP0 = iImageDefinition.points[wPtList[0]]
+              var wP0x = wXScale*wP0.x;
+              var wP0y = wYScale*wP0.y;
+
+              wCtx.moveTo(wCenterX + wP0x, wCenterY + wP0y);
+
+              for (var wi = 1; wi < wPtList.length; ++wi){
+
+                var wPN = iImageDefinition.points[wPtList[wi]]
+                var wPNx = wXScale*wPN.x;
+                var wPNy = wYScale*wPN.y;
+
+                wCtx.lineTo(wCenterX + wPNx, wCenterY + wPNy);
+              }
+
+              wCtx.closePath();
+              wCtx.fill();
+              wCtx.stroke();
+          
+            }
+
+          }
+        
+          wCtx.fillStyle = 'white';
+          wCtx.lineWidth = 3;
+          wCtx.strokeStyle = '#000000';
+            
+          for( const wPoint in iImageDefinition.points){
+            
+            var wPtObj = iImageDefinition.points[wPoint];
+
+            var wPx = wXScale*wPtObj.x;
+            var wPy = wYScale*wPtObj.y;
+
+            wCtx.beginPath();
+            wCtx.arc(wCenterX + wPx, wCenterY + wPy, wPointRadiusSize, 0, 2 * Math.PI, false);
+            wCtx.fill();
+            wCtx.stroke();
+          }
+          
+          wCtx.fillStyle = 'black';
+          wCtx.lineWidth = 3;
+          wCtx.strokeStyle = '#000000';
+          for( const wPoint in iImageDefinition.points){
+
+            var wPtObj =iImageDefinition.points[wPoint];
+
+            var wPx = wXScale*wPtObj.x;
+            var wPy = wYScale*wPtObj.y;
+
+            wCtx.fillText(wPoint, wCenterX + wPx + 1.5*wPointRadiusSize, wCenterY + wPy);
+      
+          }
+        }
+      }
+
+      function sendCalculationRequest() {
+        var wInput1 = document.getElementById("id_Input_1");
+        var wInput2 = document.getElementById("id_Input_2");
+        var wCalculationType = "inverse";
+        var wCalculationMethod = document.getElementById("id_Forward");
+        if (true == wCalculationMethod.checked)
+        {
+          wCalculationType = "forward";
+        }
+        
+
+        sendGetRequest("/misc_api/kinematicsTesting/DarkPaw/leg/" + wCalculationType + "/" + wInput1.value + "/" + wInput2.value, function(iResponseText){
+          var wImageDefinition = JSON.parse(iResponseText);
+          updateCanvas(wImageDefinition);
+        });
+      }
+
+      function resizeCanvas(){
+
+        var wCanvas = document.getElementById("id_viewport");
+        wCanvas.height = wCanvas.parentElement.clientHeight;
+        wCanvas.width = wCanvas.parentElement.clientWidth;
+       
+        sendCalculationRequest();
+      }
+
+      window.addEventListener("load", function(evt){
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        var wImageObj = {
+          points:{
+            P1:{x: 0, y:0},
+            P2:{x: 10, y:0},
+            P3:{x: 20, y:0},
+            P4:{x: 30, y:0},
+            P5:{x: 0, y:10},
+            P6:{x: 0, y:20},
+            P7:{x: 0, y:30}
+          }
+        }
+
+        updateCanvas(wImageObj);
+      });
+    </script>
+    <style>
+      #id_viewport_container {
+        width: 800px;
+        height: 800px;
+        border: 1px solid blue;
+      }
+    </style>
+  </header>
+  <body>
+    <div>
+      <input type="radio" name="calculation" id="id_Forward" onchange="sendCalculationRequest()" checked="true"/><span>Forward Calculation</span>
+      <input type="radio" name="calculation" id="id_Inverse" onchange="sendCalculationRequest()"/><span>Inverse Calculation</span>  
+    </div>
+    <div>
+      <span>Input 1</span><input type="number" id="id_Input_1" value="0" step="0.1" onchange="sendCalculationRequest()"/>
+      <span>Input 2</span><input type="number" id="id_Input_2" value="0" step="0.1" onchange="sendCalculationRequest()"/>
+    </div>
+    <div id="id_viewport_container">
+      <canvas id="id_viewport"></canvas>
+    </div>
+  </body>
+</html>

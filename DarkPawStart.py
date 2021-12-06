@@ -3,6 +3,7 @@ import threading
 
 from RobotCode.RobotModel import getRobotModel
 from RobotCode.RobotApi import Robot_Api_BluePrint
+from RobotCode.MiscApi import Misc_Api_BluePrint
 from Server import WebApp
 
 cWorkingFolder = os.getcwd()
@@ -26,7 +27,7 @@ def robotThread():
 def WebAppThread():
   WebApp.subscribeToKillProcessCallback(ShutdownRoutine)
 
-  wBluePrintList = [Robot_Api_BluePrint]
+  wBluePrintList = [Robot_Api_BluePrint, Misc_Api_BluePrint]
   WebApp.startWebApp(5000, wBluePrintList)
 
 
