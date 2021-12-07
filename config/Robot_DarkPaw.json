@@ -1,22 +1,32 @@
 {
   "Operating Frequency Hz" : 50
   
-  , "Hardware Setup" : {
+  ,"Hardware Setup" : {
     "LED" : {
       "right" : [2,1,0]
       ,"left" : [5,4,3]
     }
     
-    , "Switch GPIO" : [5 , 6, 13] 
+    ,"Switch GPIO" : [5 , 6, 13] 
   
+    ,"Legs" : [
+      {
+        "name" : "Right-Front"
+        ,"Servos" :[ 
+          { "port id" : 0 , "Pulse Width 0 degree" : 300 , "Pulse Width 180 degree" : 300 , "Angle Max (degree)" : 15 , "Angle Min (degree)" : 15 }
+          ,{ "port id" : 1 , "Pulse Width 0 degree" : 300 , "Pulse Width 180 degree" : 300 , "Angle Max (degree)" : 15 , "Angle Min (degree)" : 15 }
+          ,{ "port id" : 2 , "Pulse Width 0 degree" : 300 , "Pulse Width 180 degree" : 300 , "Angle Max (degree)" : 15 , "Angle Min (degree)" : 15 }
+        ]
+      }
+    ]
   }
 
-  , "Behavior Setup" : {
+  ,"Behavior Setup" : {
     "Initial Behavior" :
     [
-      {"Type" : "LED Left" , "Name" : "Test Lights"}
-      ,{"Type" : "LED Right" , "Name" : "Test Lights"}
-      ,{"Type" : "Switch 0" , "Name" : "Turn Off", "Parameter":{"flicker": true}}
+      {"Type" : "LED Left" , "Name" : "Breathing Rainbow", "Parameter":{"Frequency": 0.1 }}
+      ,{"Type" : "LED Right" , "Name" : "Breathing Rainbow", "Parameter":{"Frequency": 0.1 }}
+      ,{"Type" : "Switch 0" , "Name" : "Turn Off", "Parameter":{"Flicker": false}}
       ,{"Type" : "Switch 1" , "Name" : "Turn Off"}
     ]  
   }

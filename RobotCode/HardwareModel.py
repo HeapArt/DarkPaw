@@ -4,8 +4,8 @@ import time
 import math
 import threading
 
-from .HWIO.LED import LED
-from .HWIO.Switch import Switch
+from .HWIO.LEDController import LEDController
+from .HWIO.SwitchController import SwitchController
 
 
 eRobotState_VOID = 0
@@ -25,6 +25,8 @@ class HardwareModel:
     self._switch_state = []
     self._switch_Controller = None
 
+    self._legs = []
+    self._servo_controller = None
     return
 
   def cleanConfig(self):
@@ -49,7 +51,7 @@ class HardwareModel:
 
     # Extract LED Mapping
     if "LED" in iConfigObject:
-      self._led_Controller = LED()
+      self._led_Controller = LEDController()
       wLedConf = iConfigObject["LED"]
       if "left" in wLedConf:
         for wIndex in wLedConf["left"]:
@@ -72,7 +74,7 @@ class HardwareModel:
           wPinArray.append(int(wPin))
           self._switch_state.append(False)
 
-      self._switch_Controller = Switch(wPinArray)
+      self._switch_Controller = SwitchController(wPinArray)
       
     return True
 

@@ -242,7 +242,7 @@ def inverseKinematics_singleLeg(iXpos, iYpos):
 
   wCos_pip0pE = (wSq_p1 + wSq_pE - wSq_pEp1)/(2*wL_p1*wL_pE)
   if abs(wCos_pip0pE) > 1.0:
-    return wOuputPoints
+    return None
 
   wAng_p1p0pE = math.acos(wCos_pip0pE)
   wAng_pE = math.atan2(wpE_y,wpE_x)
@@ -287,7 +287,7 @@ def inverseKinematics_singleLeg(iXpos, iYpos):
 
   wCos_p4p0p5 = (wSq_p5 + wSq_p4 - wSq_p4p5)/(2*wL_p4*wL_p5)
   if abs(wCos_p4p0p5) > 1.0:
-    return wOuputPoints
+    return None
 
   wAng_p4p0p5 = math.acos(wCos_p4p0p5)
   wAng_p4 = math.atan2(wp4_y, wp4_x)
@@ -335,7 +335,7 @@ def inverseKinematics_singleLeg(iXpos, iYpos):
 
   wCos_p2pC2p3 = (wSq_p2pC2 + wSq_p3pC2 - wSq_p2p3)/(2*wL_p2pC2*wL_p3pC2)
   if abs(wCos_p2pC2p3) > 1.0:
-    return wOuputPoints
+    return None
   
   wAng_p2pC2p3 = math.acos(wCos_p2pC2p3)
 
@@ -371,7 +371,7 @@ def inverseKinematics_singleLeg(iXpos, iYpos):
 
   wCos_p6pC1p7 = (wSq_p6pC1 + wSq_p7pC1 - wSq_p6p7)/(2*wL_p6pC1*wL_p7pC1)
   if abs(wCos_p6pC1p7) > 1.0:
-    return wOuputPoints
+    return None
   
   wAng_p6pC1p7 = math.acos(wCos_p6pC1p7)
 

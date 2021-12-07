@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-class Switch():
+class SwitchController():
     def __init__(self, iGPIO_Pins = []):
         self._gpioMap = []
         for wPin in iGPIO_Pins:
@@ -33,7 +33,7 @@ class Switch():
         return
 
 if __name__ == '__main__':
-    wSwitch = Switch([5,6,13])
+    wSwitch = SwitchController([5,6,13])
     try:
         while 1:
             wSwitch.set_all_switch(True)

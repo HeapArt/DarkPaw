@@ -18,7 +18,7 @@ LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-class LED:
+class LEDController:
     def __init__(self):
         self.LED_COUNT      = 16      # Number of LED pixels.
         self.LED_PIN        = 12      # GPIO pin connected to the pixels (18 uses PWM!).
@@ -71,7 +71,7 @@ class LED:
 
 
 def originalFunc():
-    led = LED()
+    led = LEDController()
     try:  
         while True:  
             led.colorWipe(255, 0, 0)  # red
@@ -84,7 +84,7 @@ def originalFunc():
         led.colorWipe(0,0,0)  # Lights out
 
 def testFunc():
-    led = LED()
+    led = LEDController()
     try:
         print("number of pixels are [{}]".format(led.strip.numPixels()))
         wCount = led.strip.numPixels()

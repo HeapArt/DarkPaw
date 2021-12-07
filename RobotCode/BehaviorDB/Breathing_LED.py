@@ -68,36 +68,31 @@ class Behavior_BreathingLED(BehaviorTemplate):
 
     if "Rainbow" == self._mColorname:
       wIndex = 0
-      wIncrement = self.getParameters()["Color Speed"]
-      if wIncrement < 1:
-        wIncrement = 1
+      wColorSpeed = self.getParameters()["Color Speed"]
+      if wColorSpeed < 0.01:
+        wColorSpeed = 0.01
 
-      wColorSize = len(self._mColor)
-      for wi in range(0, wColorSize):
-        if 0 != self._mColor[wi]:
-          wIndex = wi
-          break
-      wFirstIndex = wIndex
-      wSecondIndex = (wIndex + 1) % wColorSize
-      if 0 == wIndex:
-        if 0 != self._mColor[wColorSize - 1]:
-          wFirstIndex = wColorSize - 1
-          wSecondIndex = 0
-      if 255 == self._mColor[wSecondIndex]:
-        if 0 < self._mColor[wFirstIndex]:
-          self._mColor[wFirstIndex] = self._mColor[wFirstIndex] - wIncrement
-      elif 255 == self._mColor[wFirstIndex]:
-        if 255 > self._mColor[wSecondIndex]:
-          self._mColor[wSecondIndex] = self._mColor[wSecondIndex] + wIncrement
-      else:
-        if 255 > self._mColor[wFirstIndex]:
-          self._mColor[wFirstIndex] = self._mColor[wFirstIndex] + wIncrement
+      wSpaceWidth = 6*255
+      wOffset = 2*255
 
-      for wi in range(0, wColorSize):
-        if self._mColor[wi] >= 255:
-          self._mColor[wi] = 255
-        elif self._mColor[wi] <= 0:
-          self._mColor[wi] = 0 
+      #initialize to 1 minute to go though all colors
+      wPosition = int(wColorSpeed*wSpaceWidth*iElapseTime/60)
+
+      # R : /--\__|/--\__
+      # G : __/--\|__/--\
+      # B : -\__/-|-\__/-
+
+      for wi in range(0, len(self._mColor)):
+        wColorValue = 0
+        wChannelPosition = (wPosition + wSpaceWidth - wi*wOffset)%wSpaceWidth
+        if wChannelPosition < 255:
+          wColorValue = wChannelPosition
+        elif wChannelPosition < 3*255:
+          wColorValue = 255
+        elif wChannelPosition < 4*255:
+          wColorValue = 255 - (wChannelPosition - 3*255)
+        
+        self._mColor[wi] = wColorValue
 
     if False:
       print("Color : {}".format(self._mColor))
