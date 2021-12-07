@@ -108,9 +108,17 @@ function getRobotBehaviorForm(iType, iName, iBehaviorFormDom) {
         }
         else if ("string" == wInputType)
         {
-          wInputDom = document.createElement("input");
-          wInputDom.type = "text";  
-          wInputDom.value = wInputValue;
+          if (0 <= iInput.toLowerCase().indexOf("color")){
+            wInputDom = document.createElement("input");
+            wInputDom.type = "color";  
+            wInputDom.value = wInputValue;  
+
+          }
+          else {
+            wInputDom = document.createElement("input");
+            wInputDom.type = "text";  
+            wInputDom.value = wInputValue;  
+          }
         }
 
         if (null != wInputDom){

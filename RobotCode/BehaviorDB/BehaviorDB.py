@@ -45,18 +45,17 @@ class BehaviorTemplate():
 
   def defineParametersForm(self, iParameterObj):
     self._mParameters = iParameterObj
+    return
 
+    
   def getParameters(self):
     return self._mParameters
 
 
   def setParameters(self, iParameters):
-    print(iParameters)
     for wKey in self._mParameters:
       if wKey in iParameters:
-
         if isinstance(self._mParameters[wKey], bool):
-          print("4")
           self._mParameters[wKey] = False
           if True == iParameters[wKey]:
             self._mParameters[wKey] = True
@@ -69,9 +68,6 @@ class BehaviorTemplate():
 
         elif isinstance(self._mParameters[wKey], str):
           self._mParameters[wKey] = str(iParameters[wKey])
-        
-
-
     return 
 
 
@@ -110,6 +106,7 @@ class BehaviorDB():
       print("Adding Behavior to library Type [{}] Name [{}]".format(wType,wName))
       self._behaviorDictionary[wType][wName] = iBehavior
       self._behaviorMenu[wType].append(wName)
+      self._behaviorMenu[wType].sort()
     
     return True
 
