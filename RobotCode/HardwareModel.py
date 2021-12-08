@@ -117,7 +117,6 @@ class HardwareModel:
               wEffectorObj.servo_Controller.setServo180DegPulseWidth(wi , wServoDef["Pulse Width 180 degree"])
             if "Reference Angle (degree)" in wServoDef:
               wEffectorObj.servo_Controller.setServoReferenceAngle(wi , wServoDef["Reference Angle (degree)"])
-              print("Set Ref")
             if "Limit Angle Max (degree)" in wServoDef:
               wEffectorObj.servo_Controller.setLimitAngleMax(wi , wServoDef["Limit Angle Max (degree)"])
             if "Limit Angle Min (degree)" in wServoDef:
@@ -324,7 +323,7 @@ class HardwareModel:
         wPositionArray = self._legs[iLegId].servoPositions
         for wi in range(0, len(wPositionArray)):
           wPositionArray[wi] = cServoOffPosition
-        self._legs[iLegId].turnServoOff_All()
+        self._legs[iLegId].servo_controller.turnServoOff_All()
     return
 
 
@@ -336,13 +335,20 @@ class HardwareModel:
       wLeg.servo_Controller.turnServoOff_All()
     return
 
-  
-  def getLegCount(self,):
-    return len(self._legs)
-
 
   def getLegName(self, iLegId):
     if iLegId >= 0:
       if iLegId < len(self._legs):
         return self._legs[iLegId].Name
+    return None
+
+
+  def getLegCount(self):
+    return len(self._legs)
+
+  
+  def getLegServoCount(self, iLegId):
+    if iLegId >= 0:
+      if iLegId < len(self._legs):
+        return len(self._legs[iLegId].servoPositions)
     return None

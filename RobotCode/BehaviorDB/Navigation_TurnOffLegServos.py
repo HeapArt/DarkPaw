@@ -1,5 +1,3 @@
-import time, math
-import random
 from .BehaviorDB import BehaviorTemplate
 
 class Navigation_TurnOffLegServos(BehaviorTemplate):
@@ -33,14 +31,14 @@ class Navigation_TurnOffLegServos(BehaviorTemplate):
   def tick(self, iRobot, iDt, iElapseTime):
 
     wHW = iRobot.getHardware()
-    
-    if "All" in self.getParameters():
+    wParameters = self.getParameters()
+    if True == wParameters["All"]:
       wHW.turnOffAllLegs()
     else:
       for wi in range(0, wHW.getLegCount()):
         wName = wHW.getLegName(wi)
-        if wName in self.getParameters():
-          if True == self.getParameters()[wName]:
+        if wName in wParameters:
+          if True == wParameters[wName]:
             wHW.turnOffLeg(wi)
       
     return True

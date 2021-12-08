@@ -70,11 +70,14 @@ class BehaviorTemplate():
           self._mParameters[wKey] = str(iParameters[wKey])
     return 
 
+
   def wake(self, iRobot):
     return True
 
+
   def sleep(self, iRobot):
     return True
+
 
   def start(self, iRobot):
     return True

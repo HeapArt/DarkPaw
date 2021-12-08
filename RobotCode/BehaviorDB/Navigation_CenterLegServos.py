@@ -1,5 +1,3 @@
-import time, math
-import random
 from .BehaviorDB import BehaviorTemplate
 
 class Navigation_CenterLegServos(BehaviorTemplate):
@@ -33,14 +31,14 @@ class Navigation_CenterLegServos(BehaviorTemplate):
   def tick(self, iRobot, iDt, iElapseTime):
 
     wHW = iRobot.getHardware()
-    
-    if True == self.getParameters()["All"]:
+    wParameters = self.getParameters()
+    if True == wParameters["All"]:
       wHW.centerAllLegs()
     else:
       for wi in range(0, wHW.getLegCount()):
         wName = wHW.getLegName(wi)
-        if wName in self.getParameters():
-          if True == self.getParameters()[wName]:
+        if wName in wParameters:
+          if True == wParameters[wName]:
             wHW.centerLeg(wi)
       
     return True

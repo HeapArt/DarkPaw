@@ -22,9 +22,9 @@ class BehaviorModel():
           return False
 
         wParameter = {}
-        if "Parameter" in wBehavior:
-          wParameter = wBehavior["Parameter"]          
-        
+        if "Parameters" in wBehavior:
+          wParameter = wBehavior["Parameters"]
+          
         self.selectBehavior(wBehavior["Type"], wBehavior["Name"], wParameter)
 
     return True
@@ -37,8 +37,11 @@ class BehaviorModel():
   def selectBehavior(self, iBehaviorType, iBehaviorName, iParameters = {}):
     wBehavior = getBehaviorDB().getBehavior(iBehaviorType, iBehaviorName)
     if None != wBehavior:
-      wBehavior.setParameters(iParameters)
-      self._startBehaviorSet[iBehaviorType] = [iBehaviorName]
+      wSetup = {}
+      wSetup["Name"] = iBehaviorName
+      wSetup["Parameters"] = iParameters
+      self._startBehaviorSet[iBehaviorType] = wSetup
+
       return True
 
     return False
@@ -74,38 +77,38 @@ class BehaviorModel():
       wList = self._stopBehaviorSet[wType]
       for wBehaviorName in wList:
         if wType in self._startBehaviorSet:
-          if wBehaviorName in self._startBehaviorSet[wType]:
-            self._startBehaviorSet[wType].remove(wBehaviorName)
+          if wBehaviorName == self._startBehaviorSet[wType]["Name"]:
+            del self._startBehaviorSet[wType]
         
         if wType in self._currentBehaviorSet:
-          if wBehaviorName in self._currentBehaviorSet[wType]:
+          if wBehaviorName == self._currentBehaviorSet[wType]:
             wBehavior = getBehaviorDB().getBehavior(wType, wBehaviorName)
             print("Stopping Behavior [{}][{}]".format(wType, wBehaviorName))
             wBehavior.stop(iRobot)
-            self._currentBehaviorSet[wType].remove(wBehaviorName)
+            del self._currentBehaviorSet[wType]
         
     self._stopBehaviorSet = {}
 
     for wType in self._startBehaviorSet:
-      wList = self._startBehaviorSet[wType]
-      for wBehaviorName in wList:        
-        if wType in self._currentBehaviorSet:
-          for wExistingBehavior in self._currentBehaviorSet[wType]:
-            wBehavior = getBehaviorDB().getBehavior(wType, wExistingBehavior)
-            print("Stopping Behavior [{}][{}]".format(wType, wExistingBehavior))
-            wBehavior.stop(iRobot)
+      wBehaviorSetup = self._startBehaviorSet[wType]
+      if wType in self._currentBehaviorSet:
+        wStopBehavior = getBehaviorDB().getBehavior(wType, self._currentBehaviorSet[wType])
+        if None != wStopBehavior:
+          print("Stopping Behavior [{}][{}]".format(wType, self._currentBehaviorSet[wType]))
+          wStopBehavior.stop(iRobot)
+          del self._currentBehaviorSet[wType]
         
-        wBehavior = getBehaviorDB().getBehavior(wType, wBehaviorName)
-        print("Starting Behavior [{}][{}]".format(wType, wBehaviorName))
-        wBehavior.start(iRobot)
-        self._currentBehaviorSet[wType] = [wBehaviorName]
+      wNewBehavior = getBehaviorDB().getBehavior(wType, wBehaviorSetup["Name"])
+      
+      print("Starting Behavior [{}][{}] with Parameters : ".format(wType, wBehaviorSetup["Name"], wBehaviorSetup["Parameters"]))
+      wNewBehavior.setParameters(wBehaviorSetup["Parameters"])
+      wNewBehavior.start(iRobot)
+      self._currentBehaviorSet[wType] = wBehaviorSetup["Name"]
 
     self._startBehaviorSet = {}
     
     for wType in self._currentBehaviorSet:
-      wList = self._currentBehaviorSet[wType]
-      for wBehavior in wList:
-        wBehavior = getBehaviorDB().getBehavior(wType, wBehavior)
-        wBehavior.tick(iRobot, iDt, iElapseTime)
+      wBehavior = getBehaviorDB().getBehavior(wType, self._currentBehaviorSet[wType])
+      wBehavior.tick(iRobot, iDt, iElapseTime)
 
     return

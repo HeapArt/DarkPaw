@@ -120,7 +120,15 @@ class ServoController():
         wServoDef = self._servolist[iServoId]
         
         if True == wServoDef.DefinitionValid:
-          wAngle = iAngleDeg + wServoDef.ReferenceAngle_degree
+          wAngle = iAngleDeg
+
+          if wAngle < wServoDef.LimitAngleMin_degree:
+            wAngle = wServoDef.LimitAngleMin_degree
+            
+          if  wAngle > wServoDef.LimitAngleMax_degree:
+            wAngle = wServoDef.LimitAngleMax_degree
+
+          wAngle = wAngle + wServoDef.ReferenceAngle_degree
           
           if wAngle < 0:
             wAngle = 0
@@ -129,12 +137,6 @@ class ServoController():
             wAngle = 180
 
           # print("input - {} , output - {}, ref - {}".format(iAngleDeg,wAngle, wServoDef.ReferenceAngle_degree  ))
-
-          if wAngle < wServoDef.LimitAngleMin_degree:
-            wAngle = wServoDef.LimitAngleMin_degree
-            
-          if  wAngle > wServoDef.LimitAngleMax_degree:
-            wAngle = wServoDef.LimitAngleMax_degree
 
           #print(wAngle)
           wServoDef.Angle = wAngle
