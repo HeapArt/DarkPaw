@@ -8,6 +8,11 @@ def _getPWMController():
     _gPWMController.set_pwm_freq(50)
   return _gPWMController
 
+def _setServoPulsWidth(iPortId, iPulseWidth):
+  if False:
+    print("Setting Servo Port {} PWM to {}".format(iPortId, iPulseWidth))
+  _getPWMController().set_pwm(iPortId, 0, iPulseWidth)
+
 class ServoDefinition():
   def __init__(self, iPort_Id = 0):
     self.PortId = iPort_Id
@@ -115,13 +120,15 @@ class ServoController():
         wServoDef = self._servolist[iServoId]
         
         if True == wServoDef.DefinitionValid:
-
           wAngle = iAngleDeg + wServoDef.ReferenceAngle_degree
+          
           if wAngle < 0:
             wAngle = 0
             
           if  wAngle > 180:
             wAngle = 180
+
+          # print("input - {} , output - {}, ref - {}".format(iAngleDeg,wAngle, wServoDef.ReferenceAngle_degree  ))
 
           if wAngle < wServoDef.LimitAngleMin_degree:
             wAngle = wServoDef.LimitAngleMin_degree
@@ -129,12 +136,12 @@ class ServoController():
           if  wAngle > wServoDef.LimitAngleMax_degree:
             wAngle = wServoDef.LimitAngleMax_degree
 
+          #print(wAngle)
           wServoDef.Angle = wAngle
           wPWM = (wAngle/180)*(wServoDef.PulseWidth_180_degree - wServoDef.PulseWidth_0_degree) + wServoDef.PulseWidth_0_degree
           wPWM = int(wPWM)
 
-          _getPWMController().set_pwm(wServoDef.PortId, 0, wPWM)
-          print(wPWM)
+          _setServoPulsWidth(wServoDef.PortId, wPWM)
           return True
     return False
 
@@ -143,14 +150,34 @@ class ServoController():
     if iServoId >= 0:
       if iServoId < len(self._servolist):
         wServoDef = self._servolist[iServoId]
-        _getPWMController().set_pwm(wServoDef.PortId, 0, 0)
+        _setServoPulsWidth(wServoDef.PortId, 0)
         return True
     return False
 
 
   def turnServoOff_All(self):
     for wServoDef in self._servolist:
-      _getPWMController().set_pwm(wServoDef.PortId, 0, 0)
+      _setServoPulsWidth(wServoDef.PortId, 0)
+    return False
+
+
+  def getServoAngle(self, iServoId):
+    if iServoId >= 0:
+      if iServoId < len(self._servolist):
+        wServoDef = self._servolist[iServoId]
+        return wServoDef.Angle
+    return None
+
+
+  def getServoCount(self):
+    return len(self._servolist)
+
+    
+  def isServoDefinitionValid(self, iServoId):
+    if iServoId >= 0:
+      if iServoId < len(self._servolist):
+        wServoDef = self._servolist[iServoId]
+        return wServoDef.DefinitionValid
     return False
 
 

@@ -22,7 +22,7 @@ class BehaviorTemplate():
 
   def getParametersForm(self):
     wFormObject = {}
-    print(self._mParameters)
+    
     for wKey in self._mParameters:
       wType = ""
 
@@ -70,6 +70,11 @@ class BehaviorTemplate():
           self._mParameters[wKey] = str(iParameters[wKey])
     return 
 
+  def wake(self, iRobot):
+    return True
+
+  def sleep(self, iRobot):
+    return True
 
   def start(self, iRobot):
     return True
@@ -121,6 +126,20 @@ class BehaviorDB():
         return self._behaviorDictionary[iBehaviorType][iBehaviorName]
 
     return None
+
+
+  def wake(self, iRobot):
+    for wType in self._behaviorDictionary:
+      for wName in self._behaviorDictionary[wType]:
+        self._behaviorDictionary[wType][wName].wake(iRobot)
+    return True
+
+
+  def sleep(self, iRobot):
+    for wType in self._behaviorDictionary:
+      for wName in self._behaviorDictionary[wType]:
+        self._behaviorDictionary[wType][wName].sleep(iRobot)
+    return True
 
 
 _gBehaviorDatabase = None

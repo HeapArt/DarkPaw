@@ -55,12 +55,14 @@ class BehaviorModel():
   def wake(self, iRobot):
     if None == iRobot:
       return
+    getBehaviorDB().wake(iRobot)
     return
 
 
   def sleep(self, iRobot):
     if None == iRobot:
       return
+    getBehaviorDB().sleep(iRobot)
     return
   
   

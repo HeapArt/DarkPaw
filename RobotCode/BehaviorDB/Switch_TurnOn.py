@@ -2,7 +2,7 @@ import time, math
 import random
 from .BehaviorDB import BehaviorTemplate
 
-class Behavior_Switch(BehaviorTemplate):
+class Switch_TurnOn(BehaviorTemplate):
   def __init__(self, iId, iState):
     wName = "Turn On"
     if False == iState:
@@ -58,7 +58,7 @@ class Behavior_Switch(BehaviorTemplate):
     return True
 
 
-_Behavior_0_on = Behavior_Switch(0, True)
-_Behavior_0_off = Behavior_Switch(0, False)
-_Behavior_1_on = Behavior_Switch(1, True)
-_Behavior_1_off = Behavior_Switch(1, False)
+_Behavior_0_on = Switch_TurnOn(0, True)
+_Behavior_0_off = Switch_TurnOn(0, False)
+_Behavior_1_on = Switch_TurnOn(1, True)
+_Behavior_1_off = Switch_TurnOn(1, False)

@@ -1,7 +1,7 @@
 import time, math
 from .BehaviorDB import BehaviorTemplate
 
-class Behavior_BreathingLED(BehaviorTemplate):
+class LED_Breathing(BehaviorTemplate):
   def __init__(self, iColorName, iLeft = False, iRight = False):
     
     self._mLeftEnabled = False
@@ -117,14 +117,14 @@ class Behavior_BreathingLED(BehaviorTemplate):
 
     return True
 
-_Behavior_l1 = Behavior_BreathingLED("Red", True, False)
-_Behavior_l2 = Behavior_BreathingLED("Blue", True, False)
-_Behavior_l3 = Behavior_BreathingLED("Green", True, False)
-_Behavior_l4 = Behavior_BreathingLED("Custom", True, False)
-_Behavior_l5 = Behavior_BreathingLED("Rainbow", True, False)
+_Behavior_l1 = LED_Breathing("Red", True, False)
+_Behavior_l2 = LED_Breathing("Blue", True, False)
+_Behavior_l3 = LED_Breathing("Green", True, False)
+_Behavior_l4 = LED_Breathing("Custom", True, False)
+_Behavior_l5 = LED_Breathing("Rainbow", True, False)
 
-_Behavior_r1 = Behavior_BreathingLED("Red", False, True)
-_Behavior_r2 = Behavior_BreathingLED("Blue", False, True)
-_Behavior_r3 = Behavior_BreathingLED("Green", False, True)
-_Behavior_r4 = Behavior_BreathingLED("Custom", False, True)
-_Behavior_r5 = Behavior_BreathingLED("Rainbow", False, True)
+_Behavior_r1 = LED_Breathing("Red", False, True)
+_Behavior_r2 = LED_Breathing("Blue", False, True)
+_Behavior_r3 = LED_Breathing("Green", False, True)
+_Behavior_r4 = LED_Breathing("Custom", False, True)
+_Behavior_r5 = LED_Breathing("Rainbow", False, True)

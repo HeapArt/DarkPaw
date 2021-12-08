@@ -11,13 +11,38 @@
   
     ,"Legs" : [
       {
-        "name" : "Right-Front"
+        "Name" : "Left-Front"
         ,"Servos" :[ 
-          { "port id" : 0 , "Pulse Width 0 degree" : 300 , "Pulse Width 180 degree" : 300 , "Angle Max (degree)" : 15 , "Angle Min (degree)" : 15 }
-          ,{ "port id" : 1 , "Pulse Width 0 degree" : 300 , "Pulse Width 180 degree" : 300 , "Angle Max (degree)" : 15 , "Angle Min (degree)" : 15 }
-          ,{ "port id" : 2 , "Pulse Width 0 degree" : 300 , "Pulse Width 180 degree" : 300 , "Angle Max (degree)" : 15 , "Angle Min (degree)" : 15 }
+          { "Port Id" : 0 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+          ,{ "Port Id" : 1 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+          ,{ "Port Id" : 2 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
         ]
       }
+      ,{
+        "Name" : "Left-Back"
+        ,"Servos" :[ 
+          { "Port Id" : 3 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+          ,{ "Port Id" : 4 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+          ,{ "Port Id" : 5 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+        ]
+      }
+      ,{
+        "Name" : "Right-Front"
+        ,"Servos" :[ 
+          { "Port Id" : 6 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+          ,{ "Port Id" : 7 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+          ,{ "Port Id" : 8 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+        ]
+      }
+      ,{
+        "Name" : "Right-Back"
+        ,"Servos" :[ 
+          { "Port Id" : 9 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+          ,{ "Port Id" : 10 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+          ,{ "Port Id" : 11 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
+        ]
+      }
+
     ]
   }
 
@@ -28,6 +53,7 @@
       ,{"Type" : "LED Right" , "Name" : "Breathing Rainbow", "Parameter":{"Frequency": 0.1 }}
       ,{"Type" : "Switch 0" , "Name" : "Turn Off", "Parameter":{"Flicker": false}}
       ,{"Type" : "Switch 1" , "Name" : "Turn Off"}
+      ,{"Type" : "Navigation" , "Name" : "Turn Off Leg Servos", "Paramter":{"All":true}}
     ]  
   }
   

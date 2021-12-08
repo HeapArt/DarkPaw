@@ -1,7 +1,7 @@
 import time, math
 from .BehaviorDB import BehaviorTemplate
 
-class Behavior_TestLED(BehaviorTemplate):
+class LED_TestLights(BehaviorTemplate):
   def __init__(self, iLeft, iRight):
     
     self._mLeftEnabled = False
@@ -89,5 +89,5 @@ class Behavior_TestLED(BehaviorTemplate):
       self._mStateWaitElaspTime = 0.0
 
 
-_Behavior_l = Behavior_TestLED(True, False)
-_Behavior_r = Behavior_TestLED(False, True)
+_Behavior_l = LED_TestLights(True, False)
+_Behavior_r = LED_TestLights(False, True)
