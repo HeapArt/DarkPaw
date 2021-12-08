@@ -20,7 +20,7 @@
             if(true == gGlobal.BehaviorMenu.hasOwnProperty(iBehaviorType))
             {
               wSelectionDom = gGlobal.BehaviorMenu[iBehaviorType].getElementsByTagName("select");
-              wSelectionDom[0].value = iCurrentBehavior[iBehaviorType][0]
+              wSelectionDom[0].value = iCurrentBehavior[iBehaviorType]
             }
           }
         });
@@ -51,7 +51,7 @@
             if (null != gGlobal.CurrentBehavior) {
               if (true == gGlobal.CurrentBehavior.hasOwnProperty(iBehaviorType)) {
                 if (0 != gGlobal.CurrentBehavior[iBehaviorType].length) {
-                  wBehaviorTypeSelect.value = gGlobal.CurrentBehavior[iBehaviorType][0];
+                  wBehaviorTypeSelect.value = gGlobal.CurrentBehavior[iBehaviorType];
                 }
               }
             }
