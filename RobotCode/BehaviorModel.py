@@ -100,7 +100,7 @@ class BehaviorModel():
         
       wNewBehavior = getBehaviorDB().getBehavior(wType, wBehaviorSetup["Name"])
       
-      print("Starting Behavior [{}][{}] with Parameters : ".format(wType, wBehaviorSetup["Name"], wBehaviorSetup["Parameters"]))
+      print("Starting Behavior [{}][{}] with Parameters : {}".format(wType, wBehaviorSetup["Name"], wBehaviorSetup["Parameters"]))
       wNewBehavior.setParameters(wBehaviorSetup["Parameters"])
       wNewBehavior.start(iRobot)
       self._currentBehaviorSet[wType] = wBehaviorSetup["Name"]

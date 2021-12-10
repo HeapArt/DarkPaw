@@ -35,11 +35,14 @@
             wCtx.strokeStyle = 'darkgrey';
             
             for( const wLine in iImageDefinition.lines){
-              var wPtList =iImageDefinition.lines[wLine];
+              var wPtList = iImageDefinition.lines[wLine];
             
               wCtx.beginPath()
 
               var wP0 = iImageDefinition.points[wPtList[0]]
+              if (null == wP0){
+                continue;
+              }
               var wP0x = wXScale*wP0.x;
               var wP0y = wYScale*wP0.y;
 
@@ -96,6 +99,7 @@
       }
 
       function sendCalculationRequest() {
+        var wInput0 = document.getElementById("id_Input_0");
         var wInput1 = document.getElementById("id_Input_1");
         var wInput2 = document.getElementById("id_Input_2");
         var wCalculationType = "inverse";
@@ -106,7 +110,7 @@
         }
         
 
-        sendGetRequest("/misc_api/kinematicsTesting/DarkPaw/leg/" + wCalculationType + "/" + wInput1.value + "/" + wInput2.value, function(iResponseText){
+        sendGetRequest("/misc_api/kinematicsTesting/DarkPaw/leg/" + wCalculationType  + "/" + wInput0.value  + "/" + wInput1.value + "/" + wInput2.value, function(iResponseText){
           var wImageDefinition = JSON.parse(iResponseText);
           updateCanvas(wImageDefinition);
         });
@@ -154,6 +158,7 @@
       <input type="radio" name="calculation" id="id_Inverse" onchange="sendCalculationRequest()"/><span>Inverse Calculation</span>  
     </div>
     <div>
+      <span>Input 0</span><input type="number" id="id_Input_0" value="0" step="0.1" onchange="sendCalculationRequest()"/>
       <span>Input 1</span><input type="number" id="id_Input_1" value="0" step="0.1" onchange="sendCalculationRequest()"/>
       <span>Input 2</span><input type="number" id="id_Input_2" value="0" step="0.1" onchange="sendCalculationRequest()"/>
     </div>

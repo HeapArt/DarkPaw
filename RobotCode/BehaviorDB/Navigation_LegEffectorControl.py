@@ -1,8 +1,8 @@
 from .BehaviorDB import BehaviorTemplate
 
-class Navigation_LegServoControl(BehaviorTemplate):
+class Navigation_LegEffectorControl(BehaviorTemplate):
   def __init__(self):
-    super().__init__("Navigation", "Leg Servo Control")
+    super().__init__("Navigation", "Leg Effector Control")
     return
 
   def wake(self, iRobot):
@@ -10,15 +10,12 @@ class Navigation_LegServoControl(BehaviorTemplate):
 
     wForm = {}
     
-    wHighestServoCount = 0
     for wi in range(0, wHW.getLegCount()):
       wForm[wHW.getLegName(wi)] = False
-      wServoCount = wHW.getLegServoCount(wi)
-      if wServoCount >= wHighestServoCount:
-        wHighestServoCount = wServoCount
-    
-    for wi in range(0, wHighestServoCount):
-      wForm["Servo {} (deg)".format(wi)] = 0.0
+      
+    wForm["X (mm)"] = 0.0
+    wForm["Y (mm)"] = 0.0
+    wForm["Z (mm)"] = 0.0
     
     self.defineParametersForm(wForm)
     
@@ -41,10 +38,9 @@ class Navigation_LegServoControl(BehaviorTemplate):
       wName = wHW.getLegName(wi)
       if wName in wParameters:
         if True == wParameters[wName]:
-          for wj in range(0, wHW.getLegServoCount(wi)):
-            wHW.setLegServoAngle(wi, wj, wParameters["Servo {} (deg)".format(wj)])
+          wHW.setLegEffectorPosition(wi, wParameters["X (mm)"], wParameters["Y (mm)"], wParameters["Z (mm)"])
       
     return True
 
 
-_Behavior = Navigation_LegServoControl()
+_Behavior = Navigation_LegEffectorControl()

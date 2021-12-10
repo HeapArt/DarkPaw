@@ -81,7 +81,7 @@ class ServoController():
     if iServoId >= 0:
       if iServoId < len(self._servolist):
         wSet = False
-        if iAngleDeg >= 0:
+        if iAngleDeg >= -180:
           if  iAngleDeg <= 180:
             self._servolist[iServoId].LimitAngleMin_degree = iAngleDeg
             wSet = True
@@ -100,7 +100,7 @@ class ServoController():
     if iServoId >= 0:
       if iServoId < len(self._servolist):
         wSet = False
-        if iAngleDeg >= 0:
+        if iAngleDeg >= -180:
           if  iAngleDeg <= 180:
             self._servolist[iServoId].LimitAngleMax_degree = iAngleDeg
             wSet = True
@@ -118,7 +118,6 @@ class ServoController():
     if iServoId >= 0:
       if iServoId < len(self._servolist):
         wServoDef = self._servolist[iServoId]
-        
         if True == wServoDef.DefinitionValid:
           wAngle = iAngleDeg
 

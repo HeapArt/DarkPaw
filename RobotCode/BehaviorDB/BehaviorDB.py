@@ -115,6 +115,9 @@ class BehaviorDB():
       self._behaviorDictionary[wType][wName] = iBehavior
       self._behaviorMenu[wType].append(wName)
       self._behaviorMenu[wType].sort()
+    else:
+      print("Behavior already in library Type [{}] Name [{}]".format(wType,wName))
+      
     
     return True
 

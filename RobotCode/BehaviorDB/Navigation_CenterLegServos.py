@@ -6,7 +6,6 @@ class Navigation_CenterLegServos(BehaviorTemplate):
     return
 
   def wake(self, iRobot):
-    print("Updated Form")
     wHW = iRobot.getHardware()
 
     wForm = {}

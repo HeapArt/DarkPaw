@@ -7,6 +7,7 @@ import threading
 from .HWIO.LEDController import LEDController
 from .HWIO.SwitchController import SwitchController
 from .HWIO.ServoController import ServoController
+from .KinematicsDB import getKinematicsDB
 
 
 eRobotState_VOID = 0
@@ -23,6 +24,13 @@ class HardwareModel:
   class EffectorDefinition:
     def __init__(self):
       self.Name = "No Name"
+      self.KinematicName = "Not Set"
+      self.KinematicReflection_X_Axis = False
+      self.KinematicReflection_Y_Axis = False
+      self.KinematicReflection_Z_Axis = False
+      self.Anchor_X_mm = 0.0
+      self.Anchor_Y_mm = 0.0
+      self.Anchor_Z_mm = 0.0
       self.servoPositions = []
       self.servo_Controller = None
 
@@ -96,6 +104,32 @@ class HardwareModel:
           wEffectorObj.Name = wLegDef["Name"]
           print("Definition Found for {}".format(wEffectorObj.Name))
         
+        if "Kinematic Model" in wLegDef:
+          wEffectorObj.KinematicName = wLegDef["Kinematic Model"]
+          print("Kinematic used {}".format(wEffectorObj.KinematicName))
+
+        if "Kinematic Reflection X-axis" in wLegDef:
+          if True == wLegDef["Kinematic Reflection X-axis"]:
+            wEffectorObj.KinematicReflection_X_Axis = True
+
+        if "Kinematic Reflection Y-axis" in wLegDef:
+          if True == wLegDef["Kinematic Reflection Y-axis"]:
+            wEffectorObj.KinematicReflection_Y_Axis = True
+
+        if "Kinematic Reflection Z-axis" in wLegDef:
+          if True == wLegDef["Kinematic Reflection Z-axis"]:
+            wEffectorObj.KinematicReflection_Z_Axis = True
+
+        if "Anchor X mm" in wLegDef:
+          wEffectorObj.Anchor_X_mm = float(wLegDef["Anchor X mm"])
+
+        if "Anchor Y mm" in wLegDef:
+          wEffectorObj.Anchor_X_mm = float(wLegDef["Anchor Y mm"])
+
+        if "Anchor Z mm" in wLegDef:
+          wEffectorObj.Anchor_X_mm = float(wLegDef["Anchor Z mm"])
+
+
         if "Servos" in wLegDef:
           wServoList = wLegDef["Servos"]
           
@@ -112,15 +146,15 @@ class HardwareModel:
             wEffectorObj.servoPositions.append(0)
             wServoDef = wServoList[wi]
             if "Pulse Width 0 degree" in wServoDef:
-              wEffectorObj.servo_Controller.setServo0DegPulseWidth(wi , wServoDef["Pulse Width 0 degree"])
+              wEffectorObj.servo_Controller.setServo0DegPulseWidth(wi , int(wServoDef["Pulse Width 0 degree"]))
             if "Pulse Width 180 degree" in wServoDef:
-              wEffectorObj.servo_Controller.setServo180DegPulseWidth(wi , wServoDef["Pulse Width 180 degree"])
+              wEffectorObj.servo_Controller.setServo180DegPulseWidth(wi , int(wServoDef["Pulse Width 180 degree"]))
             if "Reference Angle (degree)" in wServoDef:
-              wEffectorObj.servo_Controller.setServoReferenceAngle(wi , wServoDef["Reference Angle (degree)"])
+              wEffectorObj.servo_Controller.setServoReferenceAngle(wi , int(wServoDef["Reference Angle (degree)"]))
             if "Limit Angle Max (degree)" in wServoDef:
-              wEffectorObj.servo_Controller.setLimitAngleMax(wi , wServoDef["Limit Angle Max (degree)"])
+              wEffectorObj.servo_Controller.setLimitAngleMax(wi , int(wServoDef["Limit Angle Max (degree)"]))
             if "Limit Angle Min (degree)" in wServoDef:
-              wEffectorObj.servo_Controller.setLimitAngleMin(wi , wServoDef["Limit Angle Min (degree)"])
+              wEffectorObj.servo_Controller.setLimitAngleMin(wi , int(wServoDef["Limit Angle Min (degree)"]))
 
             if False == wEffectorObj.servo_Controller.isServoDefinitionValid(wi):
               print("Servo {} is not properly defined".format(wi))
@@ -276,6 +310,36 @@ class HardwareModel:
         if iServoId >= 0:
           if iServoId < len(wPositionArray):
             wPositionArray[iServoId] = iAngle
+    return
+
+
+  def setLegEffectorPosition(self, iLegId, iX, iY, iZ):
+    if iLegId >= 0:
+      if iLegId < len(self._legs):
+        wEffector = self._legs[iLegId]
+        wKinematicModel = getKinematicsDB().getKinematics(wEffector.KinematicName)
+        if None != wKinematicModel:
+          wX = iX - wEffector.Anchor_X_mm
+          wY = iY - wEffector.Anchor_Y_mm
+          wZ = iZ - wEffector.Anchor_Z_mm
+
+          if wEffector.KinematicReflection_X_Axis:
+            wX = -wX
+
+          if wEffector.KinematicReflection_Y_Axis:
+            wY = -wY
+
+          if wEffector.KinematicReflection_Z_Axis:
+            wZ = -wZ
+
+          wResult = wKinematicModel.calculateInverseKinematics(wX,wY,wZ)
+          if None != wResult:
+            wPositionArray = self._legs[iLegId].servoPositions
+            wPositionCount = len(wPositionArray)
+            for wi in range(0, len(wResult.input)):
+              if wi < wPositionCount:
+                wPositionArray[wi] = wResult.input[wi]
+
     return
 
 

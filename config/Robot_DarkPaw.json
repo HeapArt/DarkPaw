@@ -12,34 +12,66 @@
     ,"Legs" : [
       {
         "Name" : "Left-Front"
+        ,"Kinematic Model" : "DarkPaw"
+        ,"Kinematic Reflection X-axis": false
+        ,"Kinematic Reflection Y-axis": false
+        ,"Kinematic Reflection Z-axis": false
+        ,"Anchor X mm" : 42.5
+        ,"Anchor Y mm" : -41.0
+        ,"Anchor Z mm" : 0.0
+
         ,"Servos" :[ 
-          { "Port Id" : 0 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
-          ,{ "Port Id" : 1 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 78, "Limit Angle Max (degree)" : 70 , "Limit Angle Min (degree)" : 0 }
-          ,{ "Port Id" : 2 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 75, "Limit Angle Max (degree)" : 40 , "Limit Angle Min (degree)" : 0 }
+          { "Port Id" : 0 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 90 , "Limit Angle Min (degree)" : -90 }
+          ,{ "Port Id" : 2 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 75, "Limit Angle Max (degree)" : 40 , "Limit Angle Min (degree)" : -90 }
+          ,{ "Port Id" : 1 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 78, "Limit Angle Max (degree)" : 70 , "Limit Angle Min (degree)" : -90 }
         ]
       }
       ,{
         "Name" : "Left-Back"
+        ,"Kinematic Model" : "DarkPaw"
+        ,"Kinematic Reflection X-axis": false
+        ,"Kinematic Reflection Y-axis": true
+        ,"Kinematic Reflection Z-axis": false
+        ,"Anchor X mm" : -42.5
+        ,"Anchor Y mm" : -41.0
+        ,"Anchor Z mm" : 0.0
+
         ,"Servos" :[ 
-          { "Port Id" : 3 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
-          ,{ "Port Id" : 4 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 70, "Limit Angle Max (degree)" : 70 , "Limit Angle Min (degree)" : 0 }
-          ,{ "Port Id" : 5 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 78, "Limit Angle Max (degree)" : 40 , "Limit Angle Min (degree)" : 0 }
+          { "Port Id" : 3 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 90 , "Limit Angle Min (degree)" : -90 }
+          ,{ "Port Id" : 5 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 78, "Limit Angle Max (degree)" : 40 , "Limit Angle Min (degree)" : -90 }
+          ,{ "Port Id" : 4 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 70, "Limit Angle Max (degree)" : 70 , "Limit Angle Min (degree)" : -90 }
         ]
       }
       ,{
-        "Name" : "Right-Front"
+        "Name" : "Right-Front" 
+        ,"Kinematic Model" : "DarkPaw"
+        ,"Kinematic Reflection X-axis": true
+        ,"Kinematic Reflection Y-axis": false
+        ,"Kinematic Reflection Z-axis": false
+        ,"Anchor X mm" : 42.5
+        ,"Anchor Y mm" : 41.0
+        ,"Anchor Z mm" : 0.0
+
         ,"Servos" :[ 
-          { "Port Id" : 6 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
-          ,{ "Port Id" : 7 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 85, "Limit Angle Max (degree)" : 70 , "Limit Angle Min (degree)" : 0 }
-          ,{ "Port Id" : 8 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 80, "Limit Angle Max (degree)" : 40 , "Limit Angle Min (degree)" : 0 }
+          { "Port Id" : 6 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 90 , "Limit Angle Min (degree)" : -90 }
+          ,{ "Port Id" : 8 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 80, "Limit Angle Max (degree)" : 40 , "Limit Angle Min (degree)" : -90 }
+          ,{ "Port Id" : 7 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 85, "Limit Angle Max (degree)" : 70 , "Limit Angle Min (degree)" : -90 }
         ]
       }
       ,{
         "Name" : "Right-Back"
+        ,"Kinematic Model" : "DarkPaw"
+        ,"Kinematic Reflection X-axis": true
+        ,"Kinematic Reflection Y-axis": true
+        ,"Kinematic Reflection Z-axis": false
+        ,"Anchor X mm" : -42.5
+        ,"Anchor Y mm" : 41.0
+        ,"Anchor Z mm" : 0.0
+
         ,"Servos" :[ 
-          { "Port Id" : 9 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 180 , "Limit Angle Min (degree)" : 0 }
-          ,{ "Port Id" : 10 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 70 , "Limit Angle Min (degree)" : 0 }
-          ,{ "Port Id" : 11 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 95, "Limit Angle Max (degree)" : 40 , "Limit Angle Min (degree)" : 0 }
+          { "Port Id" : 9 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 90 , "Limit Angle Min (degree)" : -90 }
+          ,{ "Port Id" : 11 , "Pulse Width 0 degree" : 100 , "Pulse Width 180 degree" : 500 , "Reference Angle (degree)" : 95, "Limit Angle Max (degree)" : 40 , "Limit Angle Min (degree)" : -90 }
+          ,{ "Port Id" : 10 , "Pulse Width 0 degree" : 500 , "Pulse Width 180 degree" : 100 , "Reference Angle (degree)" : 90, "Limit Angle Max (degree)" : 70 , "Limit Angle Min (degree)" : -90 }
         ]
       }
 
