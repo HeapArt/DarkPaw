@@ -91,10 +91,13 @@ class BehaviorTemplate():
     return True
 
 
+gCreationCallback = None
+
 class BehaviorDB():
   def __init__(self):
-    self._behaviorDictionary = {}
-    self._behaviorMenu = {}
+    self._mBehaviorDictionary = {}
+    self._mBehaviorMenu = {}
+    self._mWakeCallback = []
     return
 
 
@@ -104,17 +107,17 @@ class BehaviorDB():
       return False
 
     wType = iBehavior.getBehaviorType()
-    if wType not in self._behaviorDictionary:
+    if wType not in self._mBehaviorDictionary:
       print("Adding Behavior Type to library [{}]".format(wType))
-      self._behaviorDictionary[wType] = {}
-      self._behaviorMenu[wType] = []
+      self._mBehaviorDictionary[wType] = {}
+      self._mBehaviorMenu[wType] = []
     
     wName = iBehavior.getBehaviorName()
-    if wName not in self._behaviorDictionary[wType]:
+    if wName not in self._mBehaviorDictionary[wType]:
       print("Adding Behavior to library Type [{}] Name [{}]".format(wType,wName))
-      self._behaviorDictionary[wType][wName] = iBehavior
-      self._behaviorMenu[wType].append(wName)
-      self._behaviorMenu[wType].sort()
+      self._mBehaviorDictionary[wType][wName] = iBehavior
+      self._mBehaviorMenu[wType].append(wName)
+      self._mBehaviorMenu[wType].sort()
     else:
       print("Behavior already in library Type [{}] Name [{}]".format(wType,wName))
       
@@ -123,28 +126,37 @@ class BehaviorDB():
 
 
   def getBehaviorMenu(self):
-    return self._behaviorMenu
+    return self._mBehaviorMenu
 
 
   def getBehavior(self, iBehaviorType, iBehaviorName):
-    if iBehaviorType in self._behaviorDictionary:
-      if iBehaviorName in self._behaviorDictionary[iBehaviorType]:
-        return self._behaviorDictionary[iBehaviorType][iBehaviorName]
+    if iBehaviorType in self._mBehaviorDictionary:
+      if iBehaviorName in self._mBehaviorDictionary[iBehaviorType]:
+        return self._mBehaviorDictionary[iBehaviorType][iBehaviorName]
 
     return None
 
 
+  def subscribeToWakeCallback(self, iCallback):
+    self._mWakeCallback.append(iCallback)
+
+
   def wake(self, iRobot):
-    for wType in self._behaviorDictionary:
-      for wName in self._behaviorDictionary[wType]:
-        self._behaviorDictionary[wType][wName].wake(iRobot)
+
+    for wWakeCallback in self._mWakeCallback:
+      wWakeCallback(iRobot)
+
+      
+    for wType in self._mBehaviorDictionary:
+      for wName in self._mBehaviorDictionary[wType]:
+        self._mBehaviorDictionary[wType][wName].wake(iRobot)
     return True
 
 
   def sleep(self, iRobot):
-    for wType in self._behaviorDictionary:
-      for wName in self._behaviorDictionary[wType]:
-        self._behaviorDictionary[wType][wName].sleep(iRobot)
+    for wType in self._mBehaviorDictionary:
+      for wName in self._mBehaviorDictionary[wType]:
+        self._mBehaviorDictionary[wType][wName].sleep(iRobot)
     return True
 
 

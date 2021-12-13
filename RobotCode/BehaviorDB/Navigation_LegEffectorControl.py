@@ -43,4 +43,6 @@ class Navigation_LegEffectorControl(BehaviorTemplate):
     return True
 
 
-_Behavior = Navigation_LegEffectorControl()
+def behaviorCreation(iRobot):
+  if 0 != iRobot.getHardware().getLegCount():
+    _Behavior = Navigation_LegEffectorControl()

@@ -89,5 +89,9 @@ class LED_TestLights(BehaviorTemplate):
       self._mStateWaitElaspTime = 0.0
 
 
-_Behavior_l = LED_TestLights(True, False)
-_Behavior_r = LED_TestLights(False, True)
+def behaviorCreation(iRobot):
+  if 0 != iRobot.getHardware().getLEDCount_Left():
+    _Behavior_l = LED_TestLights(True, False)
+
+  if 0 != iRobot.getHardware().getLEDCount_Right():
+    _Behavior_r = LED_TestLights(False, True)

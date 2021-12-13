@@ -58,7 +58,9 @@ class Switch_TurnOn(BehaviorTemplate):
     return True
 
 
-_Behavior_0_on = Switch_TurnOn(0, True)
-_Behavior_0_off = Switch_TurnOn(0, False)
-_Behavior_1_on = Switch_TurnOn(1, True)
-_Behavior_1_off = Switch_TurnOn(1, False)
+def behaviorCreation(iRobot):
+
+  for wi in range(0, iRobot.getHardware().getSwitchCount()):
+    _BehaviorOn = Switch_TurnOn(wi, True)
+    _BehaviorOff = Switch_TurnOn(wi, False)
+    

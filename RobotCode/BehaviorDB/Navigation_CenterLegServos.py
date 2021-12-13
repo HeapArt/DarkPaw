@@ -43,4 +43,7 @@ class Navigation_CenterLegServos(BehaviorTemplate):
     return True
 
 
-_Behavior = Navigation_CenterLegServos()
+
+def behaviorCreation(iRobot):
+  if 0 != iRobot.getHardware().getLegCount():
+    _Behavior = Navigation_CenterLegServos()

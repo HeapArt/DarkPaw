@@ -8,6 +8,7 @@ class BehaviorModel():
     self._currentBehaviorSet = {}
     self._stopBehaviorSet = {}
     self._startBehaviorSet = {}
+    self._defaultBehaviorSelection = None
     return
 
 
@@ -16,17 +17,9 @@ class BehaviorModel():
     # Setup Initial Behavior
     if "Initial Behavior" in iConfigObject:
       wInitialSetup = iConfigObject["Initial Behavior"]
-      for wBehavior in wInitialSetup:
-        if "Type" not in wBehavior or "Name" not in wBehavior:
-          print("Error parsing Initial Behavior : {}".format(json.dumps(wBehavior)))
-          return False
 
-        wParameter = {}
-        if "Parameters" in wBehavior:
-          wParameter = wBehavior["Parameters"]
-          
-        self.selectBehavior(wBehavior["Type"], wBehavior["Name"], wParameter)
-
+      self._defaultBehaviorSelection = copy.deepcopy(wInitialSetup)
+      
     return True
 
 
@@ -55,10 +48,26 @@ class BehaviorModel():
     return False
 
 
+  def setDefaultBehavior(self):
+
+    for wBehavior in self._defaultBehaviorSelection:
+      if "Type" not in wBehavior or "Name" not in wBehavior:
+        print("Error parsing Initial Behavior : {}".format(json.dumps(wBehavior)))
+        return False
+
+      wParameter = {}
+      if "Parameters" in wBehavior:
+        wParameter = wBehavior["Parameters"]
+        
+      self.selectBehavior(wBehavior["Type"], wBehavior["Name"], wParameter)
+
+
   def wake(self, iRobot):
     if None == iRobot:
       return
     getBehaviorDB().wake(iRobot)
+    self.setDefaultBehavior()
+
     return
 
 

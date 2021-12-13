@@ -117,14 +117,18 @@ class LED_Breathing(BehaviorTemplate):
 
     return True
 
-_Behavior_l1 = LED_Breathing("Red", True, False)
-_Behavior_l2 = LED_Breathing("Blue", True, False)
-_Behavior_l3 = LED_Breathing("Green", True, False)
-_Behavior_l4 = LED_Breathing("Custom", True, False)
-_Behavior_l5 = LED_Breathing("Rainbow", True, False)
 
-_Behavior_r1 = LED_Breathing("Red", False, True)
-_Behavior_r2 = LED_Breathing("Blue", False, True)
-_Behavior_r3 = LED_Breathing("Green", False, True)
-_Behavior_r4 = LED_Breathing("Custom", False, True)
-_Behavior_r5 = LED_Breathing("Rainbow", False, True)
+def behaviorCreation(iRobot):
+  if 0 != iRobot.getHardware().getLEDCount_Left():
+    _Behavior_l1 = LED_Breathing("Red", True, False)
+    _Behavior_l2 = LED_Breathing("Blue", True, False)
+    _Behavior_l3 = LED_Breathing("Green", True, False)
+    _Behavior_l4 = LED_Breathing("Custom", True, False)
+    _Behavior_l5 = LED_Breathing("Rainbow", True, False)
+
+  if 0 != iRobot.getHardware().getLEDCount_Right():
+    _Behavior_r1 = LED_Breathing("Red", False, True)
+    _Behavior_r2 = LED_Breathing("Blue", False, True)
+    _Behavior_r3 = LED_Breathing("Green", False, True)
+    _Behavior_r4 = LED_Breathing("Custom", False, True)
+    _Behavior_r5 = LED_Breathing("Rainbow", False, True)

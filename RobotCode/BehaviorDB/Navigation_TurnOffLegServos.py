@@ -43,4 +43,6 @@ class Navigation_TurnOffLegServos(BehaviorTemplate):
     return True
 
 
-_Behavior = Navigation_TurnOffLegServos()
+def behaviorCreation(iRobot):
+  if 0 != iRobot.getHardware().getLegCount():
+    _Behavior = Navigation_TurnOffLegServos()
