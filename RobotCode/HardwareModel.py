@@ -260,7 +260,7 @@ class HardwareModel:
     return len(self._led_left)
 
 
-  def getLEDColor_Left(self):
+  def getLEDColor_Left(self, iIndex):
     if iIndex >= 0:
       if iIndex < len(self._led_left):
         wPixel = self._led_left[iIndex]
@@ -272,7 +272,7 @@ class HardwareModel:
       return len(self._led_right)
 
 
-  def getLEDColor_Right(self):
+  def getLEDColor_Right(self, iIndex):
     if iIndex >= 0:
       if iIndex < len(self._led_right):
         wPixel = self._led_right[iIndex]

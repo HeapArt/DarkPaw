@@ -81,7 +81,6 @@ class RobotModel:
 
     print("Robot Waking")
 
-
     self._hardwware.wake(self)
     self._behavior.wake(self)
 

@@ -35,7 +35,7 @@ class BehaviorTemplate():
       elif isinstance(self._mParameters[wKey], str):
         wType = "string"
 
-      if "" is not wType:
+      if "" != wType:
         wFormObject[wKey] = {}
         wFormObject[wKey]["type"] = wType
         wFormObject[wKey]["value"] = self._mParameters[wKey]
@@ -138,11 +138,12 @@ class BehaviorDB():
 
 
   def subscribeToWakeCallback(self, iCallback):
+    print("Subscribe to Wake Call back for behavior")
     self._mWakeCallback.append(iCallback)
 
 
   def wake(self, iRobot):
-
+    print("Performing Wake Call back for behavior")
     for wWakeCallback in self._mWakeCallback:
       wWakeCallback(iRobot)
 
@@ -164,6 +165,7 @@ _gBehaviorDatabase = None
 def getBehaviorDB():
   global _gBehaviorDatabase
   if None == _gBehaviorDatabase:
+    print("Creating Behavior DB")
     _gBehaviorDatabase = BehaviorDB()
   return _gBehaviorDatabase
 
