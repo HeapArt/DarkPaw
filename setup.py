@@ -1,5 +1,6 @@
-#!/usr/bin/python3
+#! /usr/bin/python3
 import os
+import subprocess
 
 def installPythonRequirements():
     # Install python requirements
@@ -37,38 +38,39 @@ def updateRPiConfigFile():
 
 
 def createStartScript():
-    wRepoPath = "/" + os.path.dirname(os.path.realpath(__file__))
-    wStartUpScriptPath = "//home/pi/startup.sh"
+    wRepoPath = os.path.dirname(os.path.realpath(__file__))
+    wStartUpScriptPath = os.path.join(wRepoPath, "startup.sh")
 
     print("Creating start up script [{}]".format(wStartUpScriptPath))
 	
-    os.system('sudo touch {}'.format(wStartUpScriptPath))
+    os.system('sudo -u {} touch {}'.format(os.getlogin(),wStartUpScriptPath))
 
     with open( wStartUpScriptPath,'w') as wScript:
-        wScript.write("#!/bin/sh\nsudo python3 {}/DarkPawStart.py".format(wRepoPath))
+        wScript.write("#! /bin/sh \n\
+# wait a few seconds for Hardware to initialize\n\
+/bin/sleep 10 \n\
+# Execute DarkPaw Program\n\
+sudo {}/DarkPawStart.py \n\
+".format(wRepoPath))
 
-    os.system('sudo chmod 777 {}'.format(wStartUpScriptPath))
+    os.system('sudo chmod +x {}'.format(wStartUpScriptPath))
 
-    # Backup File
-    print("Creating back up of /etc/rc.local at /etc/rc.local.back_up")
-    os.system("sudo cp /etc/rc.local /etc/rc.local.back_up")
+    wCronTabOut = subprocess.check_output(["sudo", "crontab", "-l" ])
+    wCronTabOut = wCronTabOut.decode("utf-8").split('\n')
+    
+    wCronTabEntry = "@reboot sudo {}".format(wStartUpScriptPath)
+    
+    # check if startupscript is in crontab
+    
+    wFoundEntry = False
+    for wLine in wCronTabOut:
+        if wLine == wCronTabEntry:
+            wFoundEntry = True
+            break
 
-    with open("/etc/rc.local.back_up", "r") as wCIn:
-        with open("/etc/rc.local", "w") as wCOut:
-            wCmd = "{} start".format(wStartUpScriptPath)
-            wCmdAlreadyAdded = False
-            wFileLines = wCIn.readlines()
-            for wLine in wFileLines:
-                if wLine == wCmd:
-                    print("Command Found")
-                    wCmdAlreadyAdded = True
-            if False == wCmdAlreadyAdded:
-                for wLine in wFileLines:
-                    wCOut.write(wLine)
-                    if 0 <= wLine.find("fi") and False == wCmdAlreadyAdded:
-                        print("Printing Command")
-                        wCOut.write(wCmd)
-                        wCmdAlreadyAdded = True
+    # add start up script to crontab
+    if False == wFoundEntry:
+        os.system("echo \"$(echo '{}' ; crontab -l 2>&1)\" | crontab -".format(wCronTabEntry))
                 
     print("Startup File creation complete")
 
