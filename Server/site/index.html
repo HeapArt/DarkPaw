@@ -86,6 +86,7 @@
   
   
         hasCameraFeed(function(iHasCamera) {
+          
           if (false == iHasCamera) {
             return
           }
@@ -100,7 +101,7 @@
           wCameraImageRawImg = document.createElement("img");
           wCameraImageRawImg.src = getCameraFeedRawSrc();
           wCameraDiv.append(wCameraImageRawImg);
-
+          
           wCameraImageProcessedImg= document.createElement("img");
           wCameraImageProcessedImg.src = getCameraFeedProcessedSrc();
           wCameraDiv.append(wCameraImageProcessedImg);

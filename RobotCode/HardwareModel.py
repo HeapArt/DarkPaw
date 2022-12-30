@@ -4,6 +4,7 @@ import time
 import math
 import threading
 
+from .HWIO.CameraController import CameraController
 from .HWIO.LEDController import LEDController
 from .HWIO.SwitchController import SwitchController
 from .HWIO.ServoController import ServoController
@@ -37,6 +38,9 @@ class HardwareModel:
   def __init__(self):
     
     self._hasCamera = False
+    self._camera_frame_raw = None
+    self._camera_frame_processed = None
+    self._camera_Controller = None
 
     self._led_left = []
     self._led_right = []
@@ -52,6 +56,11 @@ class HardwareModel:
   def cleanConfig(self):
     
     self._hasCamera = False
+    self._camera_frame_raw = None
+    self._camera_frame_processed = None
+    if None != self._camera_Controller:
+      del self._camera_Controller
+      self._camera_Controller = None
 
     self._led_left = []
     self._led_right = []
@@ -74,6 +83,7 @@ class HardwareModel:
     # Camera Information
     if "Camera" in iConfigObject:
       if True == iConfigObject["Camera"]: 
+        self._camera_Controller = CameraController(0)
         self._hasCamera = True
 
     # Extract LED Mapping
@@ -197,10 +207,20 @@ class HardwareModel:
 
   def tick(self, iRobot, iDt, iElapseTime):
   
+    self.update_Camera()
     self.update_LED()
     self.update_Switchs()
     self.update_LegServos()
 
+    return
+
+
+  def update_Camera(self):
+    if None != self._camera_Controller:
+      wSuccess, wFrame = self._camera_Controller.getFrameFromCamera()
+      if True == wSuccess:
+        self._camera_frame_raw = wFrame
+      self._camera_frame_processed = self._camera_frame_raw
     return
 
 
@@ -232,10 +252,16 @@ class HardwareModel:
     
 
   def getCameraFeedRaw(self):
+    if None != self._camera_Controller:
+      if 0 != len(self._camera_frame_raw):
+        return self._camera_Controller.convertFrameToJpeg(self._camera_frame_raw)
     return None
 
 
   def getCameraFeedProcessed(self):
+    if None != self._camera_Controller:
+      if 0 != len(self._camera_frame_processed):
+        return self._camera_Controller.convertFrameToJpeg(self._camera_frame_processed)
     return None
     
 

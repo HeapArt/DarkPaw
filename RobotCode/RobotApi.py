@@ -48,23 +48,22 @@ def hasCameraFeed():
 
 @Robot_Api_BluePrint.route('/getCameraFeedRaw')
 def getCameraFeedRaw():
-  
-  wImage = getRobotModel().getHardware().getCameraFeedRaw()
-  if None == wImage:
-    return "No Camera Available"
 
-  wContent = b'--frame\r\n' + b'Content-Type: image/jpeg\r\n\r\n' + wImage + b'\r\n'
+  def generateImage():
+    while True:
+      yield (b'--frame\r\n'
+             b'Content-Type: image/jpeg\r\n\r\n' + getRobotModel().getHardware().getCameraFeedRaw() + b'\r\n')
 
-  return Response( wContent , mimetype='multipart/x-mixed-replace; boundary=frame')
+  return Response( generateImage() , mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @Robot_Api_BluePrint.route('/getCameraFeedProcessed')
 def getCameraFeedProcessed():
-  
-  wImage = getRobotModel().getHardware().getCameraFeedProcessed()
-  if None == wImage:
-    return "No Camera Available"
 
-  wContent = b'--frame\r\n' + b'Content-Type: image/jpeg\r\n\r\n' + wImage + b'\r\n'
+  def generateImage():
+    while True:
+      yield (b'--frame\r\n'
+             b'Content-Type: image/jpeg\r\n\r\n' + getRobotModel().getHardware().getCameraFeedProcessed() + b'\r\n')
 
-  return Response( wContent , mimetype='multipart/x-mixed-replace; boundary=frame')
+  return Response( generateImage() , mimetype='multipart/x-mixed-replace; boundary=frame')
+
