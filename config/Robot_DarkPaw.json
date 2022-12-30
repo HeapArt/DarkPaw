@@ -2,7 +2,9 @@
   "Operating Frequency Hz" : 50
   
   ,"Hardware Setup" : {
-    "LED" : {
+    "Camera" : true
+    
+    ,"LED" : {
       "right" : [2,1,0]
       ,"left" : [5,4,3]
     }

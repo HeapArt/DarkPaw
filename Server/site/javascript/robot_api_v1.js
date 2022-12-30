@@ -139,3 +139,23 @@ function getRobotBehaviorForm(iType, iName, iBehaviorFormDom) {
     }
   });
 }
+
+
+function hasCameraFeed(iCallback) {
+  sendGetRequest("/robot_api/hasCameraFeed", function(iResponseText){
+    var wObj = JSON.parse(iResponseText);
+    if (null != iCallback){
+      iCallback(wObj);
+    }
+  });
+}
+
+
+function getCameraFeedRawSrc() {
+  return "/robot_api/getCameraFeedRaw";
+}
+
+
+function getCameraFeedProcessedSrc() {
+  return "/robot_api/getCameraFeedProcessed";
+}

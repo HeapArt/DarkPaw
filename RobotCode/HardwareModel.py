@@ -36,6 +36,8 @@ class HardwareModel:
 
   def __init__(self):
     
+    self._hasCamera = False
+
     self._led_left = []
     self._led_right = []
     self._led_Controller = None
@@ -49,6 +51,8 @@ class HardwareModel:
 
   def cleanConfig(self):
     
+    self._hasCamera = False
+
     self._led_left = []
     self._led_right = []
     
@@ -66,6 +70,11 @@ class HardwareModel:
 
 
   def loadConfig(self, iConfigObject):
+
+    # Camera Information
+    if "Camera" in iConfigObject:
+      if True == iConfigObject["Camera"]: 
+        self._hasCamera = True
 
     # Extract LED Mapping
     if "LED" in iConfigObject:
@@ -217,6 +226,18 @@ class HardwareModel:
           wLeg.servo_Controller.setServoAngle(wi, wLeg.servoPositions[wi])
     return
 
+
+  def hasCameraFeed(self):
+    return self._hasCamera
+    
+
+  def getCameraFeedRaw(self):
+    return None
+
+
+  def getCameraFeedProcessed(self):
+    return None
+    
 
   def setLED_Left(self, iIndex, iRed = 0, iGreen = 0, iBlue = 0):
     if iIndex >= 0:
