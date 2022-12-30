@@ -70,21 +70,43 @@
 
 
             wBehaviorSendButton = document.createElement("button")
-            wBehaviorSendButton.innerText = "Set"
-            wBehaviorSendButton.OptionMenu = wBehaviorTypeSelect
+            wBehaviorSendButton.innerText = "Set";
+            wBehaviorSendButton.OptionMenu = wBehaviorTypeSelect;
             wBehaviorSendButton.addEventListener("click",function(evt){
               setRobotBehavior(evt.target.OptionMenu.behaviorType, evt.target.OptionMenu.value, evt.target.OptionMenu.behaviorForm);
-            })
+            });
             
-            wBehaviorTypeMenuDiv.append(wBehaviorSendButton)
+            wBehaviorTypeMenuDiv.append(wBehaviorSendButton);
 
-            wBehaviorMenuDiv.append(wBehaviorTypeMenuDiv)
-            gGlobal.BehaviorMenu[iBehaviorType] = wBehaviorTypeMenuDiv
+            wBehaviorMenuDiv.append(wBehaviorTypeMenuDiv);
+            gGlobal.BehaviorMenu[iBehaviorType] = wBehaviorTypeMenuDiv;
 
           }
         });
   
   
+        hasCameraFeed(function(iHasCamera) {
+          if (false == iHasCamera) {
+            return
+          }
+
+          var wCameraDiv = document.getElementById("id_camera_div");
+          wCameraDiv.innerHTML = "";
+          
+          wDivTittle = document.createElement("h2");
+          wDivTittle.innerText = "Camera Feed";
+          wCameraDiv.append(wDivTittle);
+
+          wCameraImageRawImg = document.createElement("img");
+          wCameraImageRawImg.src = getCameraFeedRawSrc();
+          wCameraDiv.append(wCameraImageRawImg);
+
+          wCameraImageProcessedImg= document.createElement("img");
+          wCameraImageProcessedImg.src = getCameraFeedProcessedSrc();
+          wCameraDiv.append(wCameraImageProcessedImg);
+
+        });
+
         console.log('page is fully loaded');
       });
   
@@ -93,6 +115,9 @@
   <body>
     <div>
       <h1>Hello DarkPaw</h1>
+      <div>
+        <div id="id_camera_div"></div>
+      </div>  
       <div>
         <h2>Kill Button</h2>
         <button onclick="sendKillProcess()">Kill Process</button>  
