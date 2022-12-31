@@ -1,5 +1,6 @@
 import json
 from flask import Blueprint, request, Response
+import time
 
 from RobotCode import BehaviorDB
 from RobotCode.RobotModel import getRobotModel
@@ -53,6 +54,7 @@ def getCameraFeedRaw():
     while True:
       yield (b'--frame\r\n'
              b'Content-Type: image/jpeg\r\n\r\n' + getRobotModel().getHardware().getCameraFeedRaw() + b'\r\n')
+      time.sleep(0.04)
 
   return Response( generateImage() , mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -64,6 +66,7 @@ def getCameraFeedProcessed():
     while True:
       yield (b'--frame\r\n'
              b'Content-Type: image/jpeg\r\n\r\n' + getRobotModel().getHardware().getCameraFeedProcessed() + b'\r\n')
+      time.sleep(0.04)
 
   return Response( generateImage() , mimetype='multipart/x-mixed-replace; boundary=frame')
 
